@@ -64,10 +64,10 @@ class ThemeProvider with ChangeNotifier {
         backgroundColor: Colors.transparent,
         foregroundColor: Color(0xFF1F2937),
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         color: Colors.white,
       ),
@@ -115,12 +115,12 @@ class ThemeProvider with ChangeNotifier {
         backgroundColor: Colors.transparent,
         foregroundColor: Color(0xFFF9FAFB),
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
-        color: const Color(0xFF1F2937),
+        color: Color(0xFF1F2937),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
