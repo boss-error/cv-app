@@ -249,7 +249,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                color: const Color(0xFF6366F1).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(32),
               ),
               child: const Icon(
@@ -325,7 +325,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: fileColor.withValues(alpha: 0.1),
+        color: fileColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -375,10 +375,10 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       margin: const EdgeInsets.only(top: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFEF4444).withValues(alpha: 0.1),
+        color: const Color(0xFFEF4444).withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFEF4444).withValues(alpha: 0.3),
+          color: const Color(0xFFEF4444).withOpacity(0.3),
         ),
       ),
       child: Row(
