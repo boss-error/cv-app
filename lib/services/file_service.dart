@@ -213,7 +213,7 @@ class FileService {
   Future<CVData> _parseTxtFile(File file) async {
     try {
       final content = await file.readAsString();
-      return _extractDataFromText(content);
+      return extractDataFromText(content);
     } catch (e) {
       throw Exception('Failed to read text file: \$e');
     }
@@ -255,7 +255,7 @@ class FileService {
       }
       
       // Extract CV data from the text
-      return _extractDataFromText(extractedText);
+      return extractDataFromText(extractedText);
     } catch (e) {
       throw Exception('Failed to parse PDF file: \$e');
     }
@@ -281,7 +281,7 @@ class FileService {
     }
   }
 
-  CVData _extractDataFromText(String content) {
+  CVData extractDataFromText(String content) {
     final lines = content.split('\n').where((line) => line.trim().isNotEmpty).toList();
     
     String fullName = '';
