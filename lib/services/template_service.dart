@@ -5,88 +5,154 @@ import '../models/cv_data.dart';
 
 class TemplateService {
   
-  // Available templates
-  static const List<Map<String, dynamic>> availableTemplates = [
-    {
-      'id': 'modern_blue',
-      'name': 'Modern Blue',
-      'description': 'A clean, modern template with blue accents',
-      'preview': 'assets/templates/previews/template1.png',
-      'category': 'modern',
-      'isPremium': false,
-    },
-    {
-      'id': 'classic_gray',
-      'name': 'Classic Gray',
-      'description': 'Traditional professional template in gray tones',
-      'preview': 'assets/templates/previews/template2.png',
-      'category': 'classic',
-      'isPremium': false,
-    },
-    {
-      'id': 'creative_colorful',
-      'name': 'Creative Colorful',
-      'description': 'Vibrant template for creative professionals',
-      'preview': 'assets/templates/previews/template3.png',
-      'category': 'creative',
-      'isPremium': true,
-    },
-    {
-      'id': 'professional_black',
-      'name': 'Professional Black',
-      'description': 'Elegant black and white professional template',
-      'preview': 'assets/templates/previews/template4.png',
-      'category': 'professional',
-      'isPremium': false,
-    },
-    {
-      'id': 'minimalist_white',
-      'name': 'Minimalist White',
-      'description': 'Clean minimalist design with plenty of white space',
-      'preview': 'assets/templates/previews/template5.png',
-      'category': 'minimalist',
-      'isPremium': true,
-    },
-    {
-      'id': 'tech_green',
-      'name': 'Tech Green',
-      'description': 'Modern template designed for tech professionals',
-      'preview': 'assets/templates/previews/template6.png',
-      'category': 'tech',
-      'isPremium': true,
-    },
-  ];
+  // Cache for loaded templates
+  static List<Map<String, dynamic>>? _cachedTemplates;
+  
+  // Load templates from meta.json
+  static Future<List<Map<String, dynamic>>> _loadTemplatesFromMeta() async {
+    try {
+      final jsonString = await rootBundle.loadString('assets/templates/meta.json');
+      final jsonData = json.decode(jsonString);
+      final templates = jsonData['templates'] as List;
+      
+      return templates.map((template) {
+        return {
+          'id': template['id'],
+          'name': template['name'],
+          'description': template['description'],
+          'preview': 'assets/templates/previews/${template['id']}.png',
+          'file': 'assets/templates/${template['file']}',
+          'config': template['config'],
+          'category': _getCategoryFromId(template['id']),
+          'isPremium': _isPremiumTemplate(template['id']),
+        };
+      }).toList();
+    } catch (e) {
+      // Fallback to default templates if meta.json fails to load
+      return _getDefaultTemplates();
+    }
+  }
+  
+  // Get category from template ID
+  static String _getCategoryFromId(String id) {
+    if (id.contains('modern')) return 'modern';
+    if (id.contains('classic')) return 'classic';
+    if (id.contains('creative')) return 'creative';
+    if (id.contains('professional')) return 'professional';
+    if (id.contains('minimalist')) return 'minimalist';
+    if (id.contains('tech')) return 'tech';
+    return 'general';
+  }
+  
+  // Check if template is premium
+  static bool _isPremiumTemplate(String id) {
+    // For now, make templates 3, 5, 6 premium
+    return ['template3', 'template5', 'template6'].contains(id);
+  }
+  
+  // Fallback default templates
+  static List<Map<String, dynamic>> _getDefaultTemplates() {
+    return [
+      {
+        'id': 'template1',
+        'name': 'Modern Blue',
+        'description': 'A clean, modern template with blue accents',
+        'preview': 'assets/templates/previews/template1.png',
+        'file': 'assets/templates/template1.pdf',
+        'config': 'meta-template1.json',
+        'category': 'modern',
+        'isPremium': false,
+      },
+      {
+        'id': 'template2',
+        'name': 'Classic Gray',
+        'description': 'Traditional professional template in gray tones',
+        'preview': 'assets/templates/previews/template2.png',
+        'file': 'assets/templates/template2.pdf',
+        'config': 'meta-template2.json',
+        'category': 'classic',
+        'isPremium': false,
+      },
+      {
+        'id': 'template3',
+        'name': 'Creative Colorful',
+        'description': 'Vibrant template for creative professionals',
+        'preview': 'assets/templates/previews/template3.png',
+        'file': 'assets/templates/template3.pdf',
+        'config': 'meta-template3.json',
+        'category': 'creative',
+        'isPremium': true,
+      },
+      {
+        'id': 'template4',
+        'name': 'Professional Black',
+        'description': 'Elegant black and white professional template',
+        'preview': 'assets/templates/previews/template4.png',
+        'file': 'assets/templates/template4.pdf',
+        'config': 'meta-template4.json',
+        'category': 'professional',
+        'isPremium': false,
+      },
+      {
+        'id': 'template5',
+        'name': 'Minimalist White',
+        'description': 'Clean minimalist design with plenty of white space',
+        'preview': 'assets/templates/previews/template5.png',
+        'file': 'assets/templates/template5.pdf',
+        'config': 'meta-template5.json',
+        'category': 'minimalist',
+        'isPremium': true,
+      },
+      {
+        'id': 'template6',
+        'name': 'Tech Green',
+        'description': 'Modern template designed for tech professionals',
+        'preview': 'assets/templates/previews/template6.png',
+        'file': 'assets/templates/template6.pdf',
+        'config': 'meta-template6.json',
+        'category': 'tech',
+        'isPremium': true,
+      },
+    ];
+  }
   
   // Get all available templates
-  static List<Map<String, dynamic>> getAllTemplates() {
-    return List.from(availableTemplates);
+  static Future<List<Map<String, dynamic>>> getAllTemplates() async {
+    if (_cachedTemplates == null) {
+      _cachedTemplates = await _loadTemplatesFromMeta();
+    }
+    return List.from(_cachedTemplates!);
   }
   
   // Get templates by category
-  static List<Map<String, dynamic>> getTemplatesByCategory(String category) {
-    return availableTemplates
+  static Future<List<Map<String, dynamic>>> getTemplatesByCategory(String category) async {
+    final templates = await getAllTemplates();
+    return templates
         .where((template) => template['category'] == category)
         .toList();
   }
   
   // Get free templates only
-  static List<Map<String, dynamic>> getFreeTemplates() {
-    return availableTemplates
+  static Future<List<Map<String, dynamic>>> getFreeTemplates() async {
+    final templates = await getAllTemplates();
+    return templates
         .where((template) => template['isPremium'] == false)
         .toList();
   }
   
   // Get premium templates only
-  static List<Map<String, dynamic>> getPremiumTemplates() {
-    return availableTemplates
+  static Future<List<Map<String, dynamic>>> getPremiumTemplates() async {
+    final templates = await getAllTemplates();
+    return templates
         .where((template) => template['isPremium'] == true)
         .toList();
   }
   
   // Get template by ID
-  static Map<String, dynamic>? getTemplateById(String templateId) {
+  static Future<Map<String, dynamic>?> getTemplateById(String templateId) async {
     try {
-      return availableTemplates.firstWhere(
+      final templates = await getAllTemplates();
+      return templates.firstWhere(
         (template) => template['id'] == templateId,
       );
     } catch (e) {
@@ -419,14 +485,15 @@ class TemplateService {
   }
 
   // Get templates as CVTemplate objects
-  static List<CVTemplate> getTemplates() {
-    return availableTemplates.map((template) => CVTemplate.fromJson(template)).toList();
+  static Future<List<CVTemplate>> getTemplates() async {
+    final templates = await getAllTemplates();
+    return templates.map((template) => CVTemplate.fromJson(template)).toList();
   }
 
   // Get template preview image
   static Future<Uint8List?> getTemplatePreviewImage(String templateId) async {
     try {
-      final template = getTemplateById(templateId);
+      final template = await getTemplateById(templateId);
       if (template == null) return null;
       
       final previewPath = template['preview'] as String;

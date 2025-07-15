@@ -209,231 +209,158 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
   Widget _buildPreviewContent(bool isDark) {
     if (_isLoading) {
       return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
-            ),
-            SizedBox(height: 16),
-            Text('Loading preview...'),
-          ],
-        ),
+        child: CircularProgressIndicator(),
       );
     }
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1F2937) : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isDark ? const Color(0xFF374151) : const Color(0xFFE5E7EB),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark 
-                ? Colors.black.withOpacity(0.2)
-                : Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: _showPdfPreview 
-            ? _buildPdfPreview(isDark)
-            : _buildImagePreview(isDark),
-      ),
-    );
-  }
-
-  Widget _buildPdfPreview(bool isDark) {
-    // For PDF preview, we'll show a placeholder since flutter_pdfview 
-    // might not work well in web. In a real app, you'd use flutter_pdfview
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: isDark ? const Color(0xFF374151) : const Color(0xFFF9FAFB),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.picture_as_pdf,
-            size: 64,
-            color: isDark ? Colors.white54 : const Color(0xFF9CA3AF),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'PDF Preview',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white : const Color(0xFF1F2937),
+    if (_showPdfPreview) {
+      // Show actual PDF preview or template image
+      if (_previewImage != null) {
+        return Container(
+          margin: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1F2937) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? const Color(0xFF374151) : const Color(0xFFE5E7EB),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Full PDF preview would be available\nin the mobile app',
-            style: TextStyle(
-              fontSize: 14,
-              color: isDark ? Colors.white70 : const Color(0xFF6B7280),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFF6366F1).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              widget.template.id,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF6366F1),
-                fontWeight: FontWeight.w600,
+          child: Column(
+            children: [
+              // Header
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark 
+                      ? const Color(0xFF374151).withOpacity(0.5)
+                      : const Color(0xFFF8FAFC),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.picture_as_pdf,
+                      color: const Color(0xFFEF4444),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${widget.template.name} Template',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : const Color(0xFF1F2937),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImagePreview(bool isDark) {
-    if (_previewImage != null) {
-      return InteractiveViewer(
-        panEnabled: true,
-        scaleEnabled: true,
-        minScale: 0.5,
-        maxScale: 3.0,
-        child: Image.memory(
-          _previewImage!,
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.contain,
-        ),
-      );
-    }
-
-    // Fallback preview
-    return _buildFallbackPreview(isDark);
-  }
-
-  Widget _buildFallbackPreview(bool isDark) {
-    final colors = {
-      'template1': const Color(0xFF3B82F6),
-      'template2': const Color(0xFF6B7280),
-      'template3': const Color(0xFFF59E0B),
-      'template4': const Color(0xFF1F2937),
-      'template5': const Color(0xFF9CA3AF),
-      'template6': const Color(0xFF10B981),
-    };
-    
-    final color = colors[widget.template.id] ?? const Color(0xFF6366F1);
-    
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: color.withOpacity(0.05),
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              width: double.infinity,
-              height: 80,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  'JOHN DOE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+              // Preview Image
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                  child: Image.memory(
+                    _previewImage!,
+                    fit: BoxFit.contain,
+                    width: double.infinity,
                   ),
                 ),
               ),
+            ],
+          ),
+        );
+      } else {
+        return Container(
+          margin: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1F2937) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? const Color(0xFF374151) : const Color(0xFFE5E7EB),
             ),
-            
-            const SizedBox(height: 24),
-            
-            // Contact info
-            Container(
-              width: double.infinity,
-              height: 20,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Sections
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Experience section
-                  Container(
-                    width: 120,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+          ),
+          child: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.picture_as_pdf,
+                  size: 64,
+                  color: Color(0xFFEF4444),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Loading Template Preview...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF6B7280),
                   ),
-                  const SizedBox(height: 12),
-                   ...List.generate(3, (index) => Padding(
-                     padding: const EdgeInsets.only(bottom: 8),
-                     child: Container(
-                       width: double.infinity,
-                       height: 12,
-                       decoration: BoxDecoration(
-                         color: color.withOpacity(0.1),
-                         borderRadius: BorderRadius.circular(4),
-                       ),
-                     ),
-                   )),
-                   
-                   const SizedBox(height: 24),
-                   
-                   // Education section
-                   Container(
-                     width: 100,
-                     height: 16,
-                     decoration: BoxDecoration(
-                       color: color,
-                       borderRadius: BorderRadius.circular(4),
-                     ),
-                   ),
-                   const SizedBox(height: 12),
-                   ...List.generate(2, (index) => Padding(
-                     padding: const EdgeInsets.only(bottom: 8),
-                     child: Container(
-                       width: double.infinity,
-                       height: 12,
-                       decoration: BoxDecoration(
-                         color: color.withOpacity(0.1),
-                         borderRadius: BorderRadius.circular(4),
-                       ),
-                     ),
-                   )),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
+      }
+    } else {
+      // Image preview mode
+      if (_previewImage != null) {
+        return Container(
+          margin: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1F2937) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? const Color(0xFF374151) : const Color(0xFFE5E7EB),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.memory(
+              _previewImage!,
+              fit: BoxFit.contain,
+              width: double.infinity,
+            ),
+          ),
+        );
+      } else {
+        return Container(
+          margin: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1F2937) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? const Color(0xFF374151) : const Color(0xFFE5E7EB),
+            ),
+          ),
+          child: const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.image_not_supported,
+                  size: 64,
+                  color: Color(0xFF9CA3AF),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Preview not available',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF6B7280),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
   }
 
   Widget _buildBottomInfo(bool isDark) {

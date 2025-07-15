@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/cv_provider.dart';
 import '../models/cv_data.dart';
+import '../widgets/modern_dialog.dart';
 import 'experience_screen.dart';
 
 class EducationScreen extends StatefulWidget {
@@ -436,86 +437,92 @@ class _EducationScreenState extends State<EducationScreen> {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(isEditing ? 'Edit Education' : 'Add Education'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: institutionController,
-                decoration: const InputDecoration(
-                  labelText: 'Institution',
-                  hintText: 'University/School name',
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: degreeController,
-                decoration: const InputDecoration(
-                  labelText: 'Degree',
-                  hintText: 'Bachelor of Science, Master of Arts, etc.',
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: fieldController,
-                decoration: const InputDecoration(
-                  labelText: 'Field of Study',
-                  hintText: 'Computer Science, Business, etc.',
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: startDateController,
-                      decoration: const InputDecoration(
-                        labelText: 'Start Date',
-                        hintText: 'MM/YYYY',
-                      ),
-                    ),
+      builder: (context) => ModernDialog(
+        title: isEditing ? 'Edit Education' : 'Add Education',
+        content: Column(
+          children: [
+            ModernTextField(
+              controller: institutionController,
+              label: 'Institution',
+              hint: 'University/School name',
+              isRequired: true,
+            ),
+            const SizedBox(height: 20),
+            ModernTextField(
+              controller: degreeController,
+              label: 'Degree',
+              hint: 'Bachelor of Science, Master of Arts, etc.',
+              isRequired: true,
+            ),
+            const SizedBox(height: 20),
+            ModernTextField(
+              controller: fieldController,
+              label: 'Field of Study',
+              hint: 'Computer Science, Business, etc.',
+              isRequired: true,
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ModernTextField(
+                    controller: startDateController,
+                    label: 'Start Date',
+                    hint: 'MM/YYYY',
+                    isRequired: true,
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      controller: endDateController,
-                      decoration: const InputDecoration(
-                        labelText: 'End Date',
-                        hintText: 'MM/YYYY or Present',
-                      ),
-                    ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ModernTextField(
+                    controller: endDateController,
+                    label: 'End Date',
+                    hint: 'MM/YYYY or Present',
+                    isRequired: true,
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: gpaController,
-                decoration: const InputDecoration(
-                  labelText: 'GPA (Optional)',
-                  hintText: '3.8/4.0',
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: descriptionController,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Description (Optional)',
-                  hintText: 'Relevant coursework, achievements, etc.',
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ModernTextField(
+              controller: gpaController,
+              label: 'GPA',
+              hint: '3.8/4.0',
+            ),
+            const SizedBox(height: 20),
+            ModernTextField(
+              controller: descriptionController,
+              label: 'Description',
+              hint: 'Relevant coursework, achievements, etc.',
+              maxLines: 3,
+            ),
+          ],
         ),
         actions: [
-          TextButton(
+          ModernButton(
+            text: 'Cancel',
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
           ),
-          ElevatedButton(
+          ModernButton(
+            text: isEditing ? 'Update' : 'Add',
+            isPrimary: true,
+            icon: isEditing ? Icons.update : Icons.add,
             onPressed: () {
+              // Validate required fields
+              if (institutionController.text.trim().isEmpty ||
+                  degreeController.text.trim().isEmpty ||
+                  fieldController.text.trim().isEmpty ||
+                  startDateController.text.trim().isEmpty ||
+                  endDateController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Please fill in all required fields'),
+                    backgroundColor: Color(0xFFEF4444),
+                  ),
+                );
+                return;
+              }
+
               final newEducation = Education(
                 institution: institutionController.text.trim(),
                 degree: degreeController.text.trim(),
@@ -535,8 +542,15 @@ class _EducationScreenState extends State<EducationScreen> {
               }
 
               Navigator.of(context).pop();
+              
+              // Show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(isEditing ? 'Education updated successfully!' : 'Education added successfully!'),
+                  backgroundColor: const Color(0xFF10B981),
+                ),
+              );
             },
-            child: Text(isEditing ? 'Update' : 'Add'),
           ),
         ],
       ),
