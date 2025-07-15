@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'providers/theme_provider.dart';
 import 'providers/cv_provider.dart';
 import 'screens/splash_screen.dart';
+import 'services/localization_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

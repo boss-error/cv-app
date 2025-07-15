@@ -5,42 +5,48 @@
       "name": "Modern Blue",
       "description": "Clean, modern design with blue accent colors.",
       "file": "template1.pdf",
-      "checksum": "abc123def456"
+      "checksum": "abc123def456",
+      "config": "meta-template1.json"
     },
     {
       "id": "template2", 
       "name": "Classic Gray",
       "description": "Elegant classic template with gray tones.",
       "file": "template2.pdf",
-      "checksum": "def456ghi789"
+      "checksum": "def456ghi789",
+      "config": "meta-template2.json"
     },
     {
       "id": "template3",
       "name": "Creative Colorful", 
       "description": "Bright and colorful design, great for creative roles.",
       "file": "template3.pdf",
-      "checksum": "ghi789jkl012"
+      "checksum": "ghi789jkl012",
+      "config": "meta-template3.json"
     },
     {
       "id": "template4",
       "name": "Professional Black",
       "description": "Sophisticated black and white professional template.",
       "file": "template4.pdf", 
-      "checksum": "jkl012mno345"
+      "checksum": "jkl012mno345",
+      "config": "meta-template4.json"
     },
     {
       "id": "template5",
       "name": "Minimalist White",
       "description": "Clean minimalist design with plenty of white space.",
       "file": "template5.pdf",
-      "checksum": "mno345pqr678"
+      "checksum": "mno345pqr678",
+      "config": "meta-template5.json"
     },
     {
       "id": "template6",
       "name": "Tech Green",
       "description": "Modern tech-focused template with green accents.",
       "file": "template6.pdf",
-      "checksum": "pqr678stu901"
+      "checksum": "pqr678stu901",
+      "config": "meta-template6.json"
     }
   ]
 }

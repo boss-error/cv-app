@@ -1,0 +1,137 @@
+{
+  "app": {
+    "title": "CV Generator",
+    "subtitle": "Professional CV Generator App"
+  },
+  "navigation": {
+    "home": "Home",
+    "templates": "Templates",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "about": "About"
+  },
+  "home": {
+    "welcome": "Welcome to CV Generator",
+    "subtitle": "Create professional CVs with ease",
+    "start_creating": "Start Creating CV",
+    "upload_existing": "Upload Existing CV",
+    "features": {
+      "templates": {
+        "title": "Professional Templates",
+        "description": "Choose from a variety of modern, professional CV templates"
+      },
+      "customization": {
+        "title": "Easy Customization",
+        "description": "Customize your CV with our intuitive editing tools"
+      },
+      "export": {
+        "title": "Multiple Formats",
+        "description": "Export your CV in PDF, Word, or other popular formats"
+      },
+      "ai_optimization": {
+        "title": "AI Optimization",
+        "description": "Get AI-powered suggestions to improve your CV"
+      }
+    }
+  },
+  "templates": {
+    "title": "Choose Template",
+    "subtitle": "Select a template that matches your style",
+    "preview": "Preview",
+    "select": "Select Template",
+    "modern_blue": "Modern Blue",
+    "classic_gray": "Classic Gray",
+    "creative_colorful": "Creative Colorful",
+    "professional_black": "Professional Black",
+    "minimalist_white": "Minimalist White",
+    "tech_green": "Tech Green"
+  },
+  "personal_info": {
+    "title": "Personal Information",
+    "subtitle": "Tell us about yourself",
+    "full_name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "address": "Address",
+    "website": "Website",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "summary": "Professional Summary",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "experience": {
+    "title": "Work Experience",
+    "subtitle": "Add your professional experience",
+    "job_title": "Job Title",
+    "company": "Company",
+    "location": "Location",
+    "start_date": "Start Date",
+    "end_date": "End Date",
+    "current": "Current Position",
+    "description": "Job Description",
+    "add_experience": "Add Experience",
+    "remove": "Remove"
+  },
+  "education": {
+    "title": "Education",
+    "subtitle": "Add your educational background",
+    "degree": "Degree",
+    "institution": "Institution",
+    "graduation_date": "Graduation Date",
+    "gpa": "GPA (Optional)",
+    "add_education": "Add Education"
+  },
+  "skills": {
+    "title": "Skills",
+    "subtitle": "Highlight your key skills",
+    "skill_name": "Skill Name",
+    "proficiency": "Proficiency Level",
+    "add_skill": "Add Skill",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "expert": "Expert"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your app experience",
+    "appearance": "Appearance",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "about_app": "About App",
+    "version": "Version",
+    "contact_support": "Contact Support",
+    "rate_app": "Rate App",
+    "share_app": "Share App"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "done": "Done",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "retry": "Retry",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK"
+  },
+  "errors": {
+    "network": "Network connection error",
+    "file_not_found": "File not found",
+    "invalid_format": "Invalid file format",
+    "upload_failed": "Upload failed",
+    "save_failed": "Failed to save",
+    "load_failed": "Failed to load"
+  }
+}

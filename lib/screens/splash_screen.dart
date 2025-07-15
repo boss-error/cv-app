@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
+import '../services/localization_service.dart';
 import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -54,6 +57,14 @@ class _SplashScreenState extends State<SplashScreen>
     _scaleController.forward();
     await Future.delayed(const Duration(milliseconds: 300));
     _fadeController.forward();
+    
+    // Initialize localization service
+    try {
+      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+      await LocalizationService.instance.load(themeProvider.locale.languageCode);
+    } catch (e) {
+      // Handle initialization error silently
+    }
     
     // Navigate to home screen after animations
     await Future.delayed(const Duration(milliseconds: 2500));

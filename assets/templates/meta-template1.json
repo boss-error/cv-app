@@ -1,0 +1,149 @@
+{
+  "personal_info": {
+    "name": "Your Name Here",
+    "tagline": "Your Position or Tagline Here",
+    "photo": "Globe_High",
+    "contact": {
+      "email": "your_name@email.com",
+      "phone": "000-00-0000",
+      "mailaddress": "Address, Street, 00000 Country",
+      "location": "Location, COUNTRY",
+      "homepage": "www.homepage.com",
+      "xtwitter": "@x-handle",
+      "linkedin": "your_id",
+      "github": "your_id",
+      "orcid": "0000-0000-0000-0000"
+    }
+  },
+  "sections": [
+    {
+      "name": "Experience",
+      "items": [
+        {
+          "title": "Job Title 1",
+          "company": "Company 1",
+          "date": "Month 20XX -- Ongoing",
+          "location": "Location",
+          "details": ["Job description 1", "Job description 2"]
+        },
+        {
+          "title": "Job Title 2",
+          "company": "Company 2",
+          "date": "Month 20XX -- Ongoing",
+          "location": "Location",
+          "details": ["Job description 1", "Job description 2"]
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "items": [
+        {
+          "title": "Project 1",
+          "organization": "Funding agency/institution",
+          "details": ["Details"]
+        },
+        {
+          "title": "Project 2",
+          "organization": "Funding agency/institution",
+          "duration": "Project duration",
+          "description": "A short abstract would also work."
+        }
+      ]
+    },
+    {
+      "name": "A Day of My Life",
+      "chart": [
+        { "hours": 6, "label": "Sleep", "description": "beautiful sleep" },
+        { "hours": 3, "label": "Hopeful novelist by night" },
+        { "hours": 8, "label": "Daytime job" },
+        { "hours": 2, "label": "Sports and relaxation" },
+        { "hours": 5, "label": "Spending time with family" }
+      ]
+    },
+    {
+      "name": "Publications",
+      "bibliography": [
+        { "type": "book", "title": "Books" },
+        { "type": "article", "title": "Journal Articles" },
+        { "type": "inproceedings", "title": "Conference Proceedings" }
+      ]
+    },
+    {
+      "name": "My Life Philosophy",
+      "quote": "Something smart or heartfelt, preferably in one sentence."
+    },
+    {
+      "name": "Most Proud of",
+      "achievements": [
+        {
+          "icon": "faTrophy",
+          "title": "Fantastic Achievement",
+          "description": "and some details about it"
+        },
+        {
+          "icon": "faHeartbeat",
+          "title": "Another achievement",
+          "description": "more details about it of course"
+        }
+      ]
+    },
+    {
+      "name": "Strengths",
+      "tags": [
+        "Hard-working",
+        "Eye for detail",
+        "Motivator & Leader",
+        "C++",
+        "Embedded Systems",
+        "Statistical Analysis"
+      ]
+    },
+    {
+      "name": "Languages",
+      "skills": [
+        { "language": "English", "rating": 5 },
+        { "language": "Spanish", "rating": 4 },
+        { "language": "German", "rating": 3.5 }
+      ]
+    },
+    {
+      "name": "Education",
+      "items": [
+        {
+          "degree": "Ph.D. in Your Discipline",
+          "institution": "Your University",
+          "date": "Sept 2002 -- June 2006",
+          "thesis": "Wonderful Research"
+        },
+        {
+          "degree": "M.Sc. in Your Discipline",
+          "institution": "Your University",
+          "date": "Sept 2001 -- June 2002"
+        },
+        {
+          "degree": "B.Sc. in Your Discipline",
+          "institution": "Stanford University",
+          "date": "Sept 1998 -- June 2001"
+        }
+      ]
+    },
+    {
+      "name": "Referees",
+      "referees": [
+        {
+          "name": "Prof. Alpha Beta",
+          "email": "a.beta@university.edu",
+          "institution": "Institute",
+          "address": "Address Line 1\nAddress line 2"
+        },
+        {
+          "name": "Prof. Gamma Delta",
+          "email": "g.delta@university.edu",
+          "institution": "Institute",
+          "address": "Address Line 1\nAddress line 2"
+        }
+      ]
+    }
+  ]
+}

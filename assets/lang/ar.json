@@ -1,0 +1,137 @@
+{
+  "app": {
+    "title": "منشئ السيرة الذاتية",
+    "subtitle": "تطبيق منشئ السيرة الذاتية المهنية"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "templates": "القوالب",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "help": "المساعدة",
+    "about": "حول التطبيق"
+  },
+  "home": {
+    "welcome": "مرحباً بك في منشئ السيرة الذاتية",
+    "subtitle": "أنشئ سيرة ذاتية مهنية بسهولة",
+    "start_creating": "ابدأ إنشاء السيرة الذاتية",
+    "upload_existing": "رفع سيرة ذاتية موجودة",
+    "features": {
+      "templates": {
+        "title": "قوالب مهنية",
+        "description": "اختر من مجموعة متنوعة من قوالب السيرة الذاتية الحديثة والمهنية"
+      },
+      "customization": {
+        "title": "تخصيص سهل",
+        "description": "خصص سيرتك الذاتية باستخدام أدوات التحرير البديهية"
+      },
+      "export": {
+        "title": "تنسيقات متعددة",
+        "description": "صدّر سيرتك الذاتية بصيغة PDF أو Word أو تنسيقات أخرى شائعة"
+      },
+      "ai_optimization": {
+        "title": "تحسين بالذكاء الاصطناعي",
+        "description": "احصل على اقتراحات مدعومة بالذكاء الاصطناعي لتحسين سيرتك الذاتية"
+      }
+    }
+  },
+  "templates": {
+    "title": "اختر القالب",
+    "subtitle": "اختر قالباً يناسب أسلوبك",
+    "preview": "معاينة",
+    "select": "اختر القالب",
+    "modern_blue": "أزرق حديث",
+    "classic_gray": "رمادي كلاسيكي",
+    "creative_colorful": "إبداعي ملون",
+    "professional_black": "أسود مهني",
+    "minimalist_white": "أبيض بسيط",
+    "tech_green": "أخضر تقني"
+  },
+  "personal_info": {
+    "title": "المعلومات الشخصية",
+    "subtitle": "أخبرنا عن نفسك",
+    "full_name": "الاسم الكامل",
+    "email": "عنوان البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "address": "العنوان",
+    "website": "الموقع الإلكتروني",
+    "linkedin": "لينكد إن",
+    "github": "جيت هاب",
+    "summary": "الملخص المهني",
+    "next": "التالي",
+    "previous": "السابق"
+  },
+  "experience": {
+    "title": "الخبرة العملية",
+    "subtitle": "أضف خبرتك المهنية",
+    "job_title": "المسمى الوظيفي",
+    "company": "الشركة",
+    "location": "الموقع",
+    "start_date": "تاريخ البداية",
+    "end_date": "تاريخ النهاية",
+    "current": "المنصب الحالي",
+    "description": "وصف الوظيفة",
+    "add_experience": "إضافة خبرة",
+    "remove": "إزالة"
+  },
+  "education": {
+    "title": "التعليم",
+    "subtitle": "أضف خلفيتك التعليمية",
+    "degree": "الدرجة العلمية",
+    "institution": "المؤسسة التعليمية",
+    "graduation_date": "تاريخ التخرج",
+    "gpa": "المعدل التراكمي (اختياري)",
+    "add_education": "إضافة تعليم"
+  },
+  "skills": {
+    "title": "المهارات",
+    "subtitle": "أبرز مهاراتك الأساسية",
+    "skill_name": "اسم المهارة",
+    "proficiency": "مستوى الإتقان",
+    "add_skill": "إضافة مهارة",
+    "beginner": "مبتدئ",
+    "intermediate": "متوسط",
+    "advanced": "متقدم",
+    "expert": "خبير"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "خصص تجربة التطبيق",
+    "appearance": "المظهر",
+    "language": "اللغة",
+    "theme": "السمة",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام",
+    "notifications": "الإشعارات",
+    "privacy": "الخصوصية",
+    "about_app": "حول التطبيق",
+    "version": "الإصدار",
+    "contact_support": "اتصل بالدعم",
+    "rate_app": "قيّم التطبيق",
+    "share_app": "شارك التطبيق"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تحرير",
+    "done": "تم",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
+    "ok": "موافق"
+  },
+  "errors": {
+    "network": "خطأ في الاتصال بالشبكة",
+    "file_not_found": "الملف غير موجود",
+    "invalid_format": "تنسيق ملف غير صالح",
+    "upload_failed": "فشل في الرفع",
+    "save_failed": "فشل في الحفظ",
+    "load_failed": "فشل في التحميل"
+  }
+}

@@ -44,7 +44,7 @@ dependencies:
   flutter_spinkit: ^5.2.0
   
   # Utilities
-  intl: ^0.18.1
+  intl: ^0.20.2
   uuid: ^4.2.1
   mime: ^1.0.4
 
@@ -78,6 +78,7 @@ flutter:
     - assets/templates/previews/
     - assets/animations/
     - assets/icons/
+    - assets/lang/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

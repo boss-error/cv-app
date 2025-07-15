@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/localization_service.dart';
 
 class ThemeProvider with ChangeNotifier {
   static const String _themeKey = 'theme_mode';
@@ -34,8 +35,9 @@ class ThemeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setLocale(Locale locale) {
+  void setLocale(Locale locale) async {
     _locale = locale;
+    await LocalizationService.instance.load(locale.languageCode);
     notifyListeners();
   }
 
