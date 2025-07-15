@@ -213,7 +213,7 @@ class FileService {
   Future<CVData> _parseTxtFile(File file) async {
     try {
       final content = await file.readAsString();
-      return extractDataFromText(content);
+      return _extractDataFromText(content);
     } catch (e) {
       throw Exception('Failed to read text file: \$e');
     }
