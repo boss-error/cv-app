@@ -8,6 +8,8 @@ import 'package:path/path.dart' as path;
 import 'package:crypto/crypto.dart';
 import 'package:image/image.dart' as img;
 import 'package:pdfx/pdfx.dart';
+import 'package:pdf_text/pdf_text.dart';
+import 'package:docx_to_text/docx_to_text.dart';
 import '../models/cv_data.dart';
 
 class FileService {
@@ -221,29 +223,53 @@ class FileService {
 
   Future<CVData> _parsePdfFile(File file) async {
     try {
-      final document = await PdfDocument.openFile(file.path);
-      
-      // Extract text from all pages
+      // Try to extract text using pdf_text package
       String extractedText = '';
-      for (int i = 1; i <= document.pagesCount; i++) {
-        final page = await document.getPage(i);
-        // Note: pdfx doesn't extract text directly
-        // This is a placeholder - in production you'd need additional text extraction
-        await page.close();
+      
+      try {
+        final pdfDoc = await PDFDoc.fromFile(file);
+        final pages = await pdfDoc.getAllPages();
+        
+        for (final page in pages) {
+          final pageText = await page.text;
+          extractedText += pageText + '\n';
+        }
+        
+        await pdfDoc.close();
+      } catch (pdfTextError) {
+        // Fallback to pdfx for basic document handling
+        print('PDF text extraction failed, using fallback: \$pdfTextError');
+        
+        final document = await PdfDocument.openFile(file.path);
+        await document.close();
+        
+        // Return basic structure if text extraction fails
+        return CVData(
+          personalInfo: PersonalInfo(
+            fullName: 'PDF Document Uploaded (Text extraction failed)',
+            email: 'email@example.com',
+            phone: '+1234567890',
+            address: 'Address from PDF',
+            profileSummary: 'CV uploaded from PDF document. Please review and edit the information.',
+          ),
+        );
       }
       
-      await document.close();
-      
-      // For now, return basic structure since text extraction requires additional setup
-      return CVData(
-        personalInfo: PersonalInfo(
-          fullName: 'PDF Document Uploaded',
-          email: 'email@example.com',
-          phone: '+1234567890',
-          address: 'Address from PDF',
-          profileSummary: 'CV data extracted from PDF document',
-        ),
-      );
+      // If we successfully extracted text, parse it
+      if (extractedText.trim().isNotEmpty) {
+        return _extractDataFromText(extractedText);
+      } else {
+        // Return basic structure if no text was extracted
+        return CVData(
+          personalInfo: PersonalInfo(
+            fullName: 'PDF Document Uploaded (No text found)',
+            email: 'email@example.com',
+            phone: '+1234567890',
+            address: 'Address from PDF',
+            profileSummary: 'CV uploaded from PDF document. No readable text was found.',
+          ),
+        );
+      }
     } catch (e) {
       throw Exception('Failed to parse PDF file: \$e');
     }
@@ -251,19 +277,53 @@ class FileService {
 
   Future<CVData> _parseDocFile(File file) async {
     try {
-      // For now, return basic structure
-      // In a real implementation, you would use docx_to_text package
-      // final text = await DocxToText.fromFile(file.path);
-      // return _extractDataFromText(text);
+      String extractedText = '';
+      final extension = getFileExtension(file.path);
       
-      return CVData(
-        personalInfo: PersonalInfo(
-          fullName: 'DOC parsing not fully implemented',
-          email: 'email@example.com',
-          phone: '+1234567890',
-          address: 'Address from DOC',
-        ),
-      );
+      if (extension == 'docx') {
+        try {
+          // Extract text from DOCX file
+          extractedText = await DocxToText.fromFile(file.path) ?? '';
+        } catch (docxError) {
+          print('DOCX text extraction failed: \$docxError');
+          return CVData(
+            personalInfo: PersonalInfo(
+              fullName: 'DOCX Document Uploaded (Text extraction failed)',
+              email: 'email@example.com',
+              phone: '+1234567890',
+              address: 'Address from DOCX',
+              profileSummary: 'DOCX document uploaded. Text extraction failed. Please review and edit the information.',
+            ),
+          );
+        }
+      } else {
+        // DOC files are not supported by docx_to_text package
+        return CVData(
+          personalInfo: PersonalInfo(
+            fullName: 'DOC Document Uploaded (Format not supported)',
+            email: 'email@example.com',
+            phone: '+1234567890',
+            address: 'Address from DOC',
+            profileSummary: 'DOC format is not fully supported. Please convert to DOCX or PDF for better text extraction.',
+          ),
+        );
+      }
+      
+      // If we successfully extracted text, parse it
+      if (extractedText.trim().isNotEmpty) {
+        return _extractDataFromText(extractedText);
+      } else {
+        // Return basic structure if no text was extracted
+        return CVData(
+          personalInfo: PersonalInfo(
+            fullName: 'DOCX Document Uploaded (No text found)',
+            email: 'email@example.com',
+            phone: '+1234567890',
+            address: 'Address from DOCX',
+            profileSummary: 'DOCX document uploaded. No readable text was found.',
+          ),
+        );
+      }
     } catch (e) {
       throw Exception('Failed to parse DOC file: \$e');
     }
@@ -298,12 +358,15 @@ class FileService {
         }
       }
 
-      // Extract phone
-      if (phone.isEmpty && (lowerLine.contains('phone') || lowerLine.contains('mobile') || lowerLine.contains('tel'))) {
+      // Extract phone (enhanced to find phone numbers anywhere in the line)
+      if (phone.isEmpty) {
         final phoneRegex = RegExp(r'[+]?[0-9][0-9\s\-\(\)]{8,}');
         final match = phoneRegex.firstMatch(line);
         if (match != null) {
-          phone = match.group(0)!.replaceAll(RegExp(r'[^+0-9]'), '');
+          final potentialPhone = match.group(0)!.replaceAll(RegExp(r'[^+0-9]'), '');
+          if (potentialPhone.length >= 8) {
+            phone = potentialPhone;
+          }
         }
       }
 
@@ -334,34 +397,65 @@ class FileService {
         }
       }
 
-      // Extract name (usually first non-empty line that doesn't contain common keywords)
+      // Extract name (enhanced to handle Arabic and English names)
       if (fullName.isEmpty && line.length > 2 && !line.contains('@') && 
           !lowerLine.contains('cv') && !lowerLine.contains('resume') &&
-          !lowerLine.contains('curriculum') && !lowerLine.contains('vitae')) {
-        fullName = line;
+          !lowerLine.contains('curriculum') && !lowerLine.contains('vitae') &&
+          !lowerLine.contains('phone') && !lowerLine.contains('email') &&
+          !lowerLine.contains('address') && !RegExp(r'^\d+').hasMatch(line)) {
+        // Check if line contains name-like patterns (Arabic or English)
+        if (RegExp(r'^[a-zA-Z؀-ۿ\s]+$').hasMatch(line)) {
+          fullName = line;
+        }
       }
 
-      // Extract skills
-      if (lowerLine.contains('skill') || lowerLine.contains('competenc') || lowerLine.contains('technolog')) {
+      // Extract skills (English and Arabic)
+      if (lowerLine.contains('skill') || lowerLine.contains('competenc') || lowerLine.contains('technolog') ||
+          line.contains('مهارات') || line.contains('خبرات') || line.contains('قدرات')) {
         for (int j = i + 1; j < lines.length && j < i + 5; j++) {
           final skillLine = lines[j].trim();
           if (skillLine.isNotEmpty && !skillLine.toLowerCase().contains('experience') && 
-              !skillLine.toLowerCase().contains('education')) {
+              !skillLine.toLowerCase().contains('education') && !skillLine.contains('خبرة') && 
+              !skillLine.contains('تعليم')) {
             final skillItems = skillLine.split(RegExp(r'[,;|•]')).map((s) => s.trim()).where((s) => s.isNotEmpty);
             skills.addAll(skillItems);
           }
         }
       }
 
-      // Extract summary/objective
+      // Extract summary/objective (English and Arabic)
       if (profileSummary == null && (lowerLine.contains('summary') || lowerLine.contains('objective') || 
-          lowerLine.contains('profile') || lowerLine.contains('about'))) {
+          lowerLine.contains('profile') || lowerLine.contains('about') ||
+          line.contains('ملخص') || line.contains('نبذة') || line.contains('هدف'))) {
         for (int j = i + 1; j < lines.length && j < i + 3; j++) {
           final summaryLine = lines[j].trim();
           if (summaryLine.isNotEmpty && summaryLine.length > 20) {
             profileSummary = summaryLine;
             break;
           }
+        }
+      }
+
+      // Extract education (English and Arabic)
+      if (lowerLine.contains('education') || lowerLine.contains('academic') || 
+          lowerLine.contains('qualification') || lowerLine.contains('degree') ||
+          line.contains('تعليم') || line.contains('مؤهلات') || line.contains('شهادات')) {
+        education.addAll(_extractEducationSection(lines, i));
+      }
+
+      // Extract experience (English and Arabic)
+      if (lowerLine.contains('experience') || lowerLine.contains('employment') || 
+          lowerLine.contains('work history') || lowerLine.contains('career') ||
+          line.contains('خبرة') || line.contains('عمل') || line.contains('وظائف')) {
+        experience.addAll(_extractExperienceSection(lines, i));
+      }
+
+      // Extract address
+      if (address.isEmpty && (lowerLine.contains('address') || lowerLine.contains('location') || 
+          lowerLine.contains('city') || lowerLine.contains('country'))) {
+        final addressLine = lines[i + 1 < lines.length ? i + 1 : i].trim();
+        if (addressLine.isNotEmpty && !addressLine.toLowerCase().contains('email')) {
+          address = addressLine;
         }
       }
     }
@@ -386,6 +480,130 @@ class FileService {
       education: education,
       experience: experience,
     );
+  }
+
+  List<Education> _extractEducationSection(List<String> lines, int startIndex) {
+    List<Education> educationList = [];
+    
+    for (int i = startIndex + 1; i < lines.length && i < startIndex + 10; i++) {
+      final line = lines[i].trim();
+      final lowerLine = line.toLowerCase();
+      
+      // Stop if we hit another section
+      if (lowerLine.contains('experience') || lowerLine.contains('skill') || 
+          lowerLine.contains('work') || line.isEmpty) {
+        break;
+      }
+      
+      // Look for degree patterns
+      if (line.length > 5 && (lowerLine.contains('bachelor') || lowerLine.contains('master') || 
+          lowerLine.contains('phd') || lowerLine.contains('diploma') || 
+          lowerLine.contains('certificate') || lowerLine.contains('degree'))) {
+        
+        String institution = '';
+        String degree = line;
+        String fieldOfStudy = '';
+        String startDate = '';
+        String endDate = '';
+        
+        // Try to extract institution from next lines
+        for (int j = i + 1; j < lines.length && j < i + 3; j++) {
+          final nextLine = lines[j].trim();
+          if (nextLine.isNotEmpty && !nextLine.toLowerCase().contains('gpa')) {
+            if (institution.isEmpty) {
+              institution = nextLine;
+            }
+            // Look for dates
+            final dateRegex = RegExp(r'(19|20)\d{2}');
+            if (dateRegex.hasMatch(nextLine)) {
+              final dates = dateRegex.allMatches(nextLine).map((m) => m.group(0)!).toList();
+              if (dates.isNotEmpty) {
+                startDate = dates.first;
+                endDate = dates.length > 1 ? dates.last : 'Present';
+              }
+            }
+          }
+        }
+        
+        educationList.add(Education(
+          institution: institution.isNotEmpty ? institution : 'Institution not specified',
+          degree: degree,
+          fieldOfStudy: fieldOfStudy.isNotEmpty ? fieldOfStudy : 'Field not specified',
+          startDate: startDate.isNotEmpty ? startDate : '2020',
+          endDate: endDate.isNotEmpty ? endDate : '2024',
+        ));
+      }
+    }
+    
+    return educationList;
+  }
+
+  List<Experience> _extractExperienceSection(List<String> lines, int startIndex) {
+    List<Experience> experienceList = [];
+    
+    for (int i = startIndex + 1; i < lines.length && i < startIndex + 15; i++) {
+      final line = lines[i].trim();
+      final lowerLine = line.toLowerCase();
+      
+      // Stop if we hit another section
+      if (lowerLine.contains('education') || lowerLine.contains('skill') || 
+          lowerLine.contains('qualification') || line.isEmpty) {
+        break;
+      }
+      
+      // Look for job title patterns (usually the first line of experience entry)
+      if (line.length > 3 && !lowerLine.contains('company') && 
+          !lowerLine.contains('responsibilities') && !line.startsWith('-') && 
+          !line.startsWith('•')) {
+        
+        String company = '';
+        String position = line;
+        String startDate = '';
+        String endDate = '';
+        String location = '';
+        List<String> responsibilities = [];
+        
+        // Try to extract company and other details from next lines
+        for (int j = i + 1; j < lines.length && j < i + 8; j++) {
+          final nextLine = lines[j].trim();
+          final nextLowerLine = nextLine.toLowerCase();
+          
+          if (nextLine.isEmpty) break;
+          
+          // Extract company (usually second line)
+          if (company.isEmpty && !nextLowerLine.contains('responsibilities') && 
+              !nextLine.startsWith('-') && !nextLine.startsWith('•')) {
+            company = nextLine;
+          }
+          
+          // Extract dates
+          final dateRegex = RegExp(r'(19|20)\d{2}');
+          if (dateRegex.hasMatch(nextLine)) {
+            final dates = dateRegex.allMatches(nextLine).map((m) => m.group(0)!).toList();
+            if (dates.isNotEmpty) {
+              startDate = dates.first;
+              endDate = dates.length > 1 ? dates.last : 'Present';
+            }
+          }
+          
+          // Extract responsibilities (lines starting with - or •)
+          if (nextLine.startsWith('-') || nextLine.startsWith('•')) {
+            responsibilities.add(nextLine.substring(1).trim());
+          }
+        }
+        
+        experienceList.add(Experience(
+          company: company.isNotEmpty ? company : 'Company not specified',
+          position: position,
+          startDate: startDate.isNotEmpty ? startDate : '2022',
+          endDate: endDate.isNotEmpty ? endDate : 'Present',
+          location: location.isNotEmpty ? location : 'Location not specified',
+          responsibilities: responsibilities.isNotEmpty ? responsibilities : ['Responsibilities not specified'],
+        ));
+      }
+    }
+    
+    return experienceList;
   }
 
   String getFileExtension(String filePath) {
