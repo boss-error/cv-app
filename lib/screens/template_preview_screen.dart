@@ -1,7 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 import '../providers/cv_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/template_service.dart';
 import '../models/cv_data.dart';
 
@@ -30,11 +33,28 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
 
   Future<void> _loadPreview() async {
     try {
+      // Try to load the preview image first
       final image = await TemplateService.getTemplatePreviewImage(widget.template.id);
-      setState(() {
-        _previewImage = image;
-        _isLoading = false;
-      });
+      if (image != null) {
+        setState(() {
+          _previewImage = image;
+          _isLoading = false;
+        });
+        return;
+      }
+      
+      // If no preview image, try to load PDF from assets
+      try {
+        final pdfData = await rootBundle.load('assets/templates/template1.pdf');
+        setState(() {
+          _previewImage = pdfData.buffer.asUint8List();
+          _isLoading = false;
+        });
+      } catch (pdfError) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;
@@ -58,45 +78,66 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.themeMode == ThemeMode.dark;
     
-    return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF111827) : const Color(0xFFFAFAFA),
-      appBar: AppBar(
-        title: Text(widget.template.name),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          // Toggle preview mode
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _showPdfPreview = !_showPdfPreview;
-              });
-            },
-            icon: Icon(
-              _showPdfPreview ? Icons.image : Icons.picture_as_pdf,
-              color: const Color(0xFF6366F1),
+    return CupertinoPageScaffold(
+      backgroundColor: isDark ? const Color(0xFF000000) : const Color(0xFFF2F2F7),
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: isDark 
+            ? const Color(0xFF1C1C1E).withOpacity(0.8)
+            : const Color(0xFFF2F2F7).withOpacity(0.8),
+        border: Border(
+          bottom: BorderSide(
+            color: isDark 
+                ? const Color(0xFF38383A)
+                : const Color(0xFFD1D1D6),
+            width: 0.5,
+          ),
+        ),
+        middle: Text(
+          widget.template.name,
+          style: TextStyle(
+            color: isDark ? CupertinoColors.white : CupertinoColors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Toggle preview mode
+            CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () {
+                setState(() {
+                  _showPdfPreview = !_showPdfPreview;
+                });
+              },
+              child: Icon(
+                _showPdfPreview ? CupertinoIcons.photo : CupertinoIcons.doc,
+                color: const Color(0xFF007AFF),
+                size: 22,
+              ),
             ),
-            tooltip: _showPdfPreview ? 'Show Image Preview' : 'Show PDF Preview',
-          ),
-          
-          // Select template
-          Consumer<CVProvider>(
-            builder: (context, cvProvider, child) {
-              final isSelected = cvProvider.cvData.selectedTemplate == widget.template.id;
-              return IconButton(
-                onPressed: _selectTemplate,
-                icon: Icon(
-                  isSelected ? Icons.check_circle : Icons.check_circle_outline,
-                  color: isSelected ? const Color(0xFF10B981) : const Color(0xFF6366F1),
-                ),
-                tooltip: isSelected ? 'Selected' : 'Select Template',
-              );
-            },
-          ),
-        ],
+            
+            // Select template
+            Consumer<CVProvider>(
+              builder: (context, cvProvider, child) {
+                final isSelected = cvProvider.cvData.selectedTemplate == widget.template.id;
+                return CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: _selectTemplate,
+                  child: Icon(
+                    isSelected ? CupertinoIcons.checkmark_circle_fill : CupertinoIcons.circle,
+                    color: isSelected ? const Color(0xFF34C759) : const Color(0xFF007AFF),
+                    size: 22,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [

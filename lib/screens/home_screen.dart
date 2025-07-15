@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/theme_provider.dart';
@@ -7,6 +8,9 @@ import 'personal_info_screen.dart';
 import 'file_upload_screen.dart';
 import 'template_selection_screen.dart';
 import 'settings_screen.dart';
+import 'education_screen.dart';
+import 'experience_screen.dart';
+import 'skills_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,138 +36,85 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.themeMode == ThemeMode.dark;
     
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: _buildNavigationDrawer(context, isDark),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: isDark
-                ? [
-                    const Color(0xFF0F0F23),
-                    const Color(0xFF1A1A2E),
-                    const Color(0xFF16213E),
-                  ]
-                : [
-                    const Color(0xFFF8FAFC),
-                    const Color(0xFFE2E8F0),
-                    const Color(0xFFCBD5E1),
-                  ],
+    return CupertinoPageScaffold(
+      backgroundColor: isDark ? const Color(0xFF000000) : const Color(0xFFF2F2F7),
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: isDark 
+            ? const Color(0xFF1C1C1E).withOpacity(0.8)
+            : const Color(0xFFF2F2F7).withOpacity(0.8),
+        border: Border(
+          bottom: BorderSide(
+            color: isDark 
+                ? const Color(0xFF38383A)
+                : const Color(0xFFD1D1D6),
+            width: 0.5,
           ),
         ),
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              // Modern App Bar
-              SliverAppBar(
-                expandedHeight: 120,
-                floating: true,
-                pinned: true,
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                leading: IconButton(
-                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.menu_rounded,
-                      color: isDark ? Colors.white : const Color(0xFF1E293B),
-                    ),
-                  ),
-                ),
-                actions: [
-                  Consumer<ThemeProvider>(
-                    builder: (context, themeProvider, child) {
-                      return IconButton(
-                        onPressed: () => themeProvider.toggleTheme(),
-                        icon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
-                            color: isDark ? Colors.white : const Color(0xFF1E293B),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 16),
-                ],
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    padding: const EdgeInsets.fromLTRB(24, 80, 24, 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'home.welcome'.tr,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? Colors.white : const Color(0xFF1E293B),
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'home.subtitle'.tr,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: isDark ? Colors.white70 : const Color(0xFF64748B),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+        middle: Text(
+          'CV Generator',
+          style: TextStyle(
+            color: isDark ? CupertinoColors.white : CupertinoColors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: Consumer<ThemeProvider>(
+          builder: (context, themeProvider, child) {
+            return CupertinoButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => themeProvider.toggleTheme(),
+              child: Icon(
+                isDark ? CupertinoIcons.sun_max : CupertinoIcons.moon,
+                color: const Color(0xFF007AFF),
+                size: 22,
               ),
-              
-              // Content
-              SliverPadding(
-                padding: const EdgeInsets.all(24),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                    // Quick Stats
-                    _buildQuickStats(context, isDark),
+            );
+          },
+        ),
+      ),
+      child: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Welcome Section
+                    _buildWelcomeSection(context, isDark),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
+                    
+                    // Quick Actions
+                    _buildQuickActions(context, isDark),
+                    
+                    const SizedBox(height: 24),
                     
                     // Features Grid
                     _buildFeaturesGrid(context, isDark),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     
                     // Action Cards
                     _buildActionCards(context, isDark),
                     
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                     
                     // Recent Templates
                     _buildRecentTemplates(context, isDark),
                     
-                    const SizedBox(height: 100),
-                  ]),
+                    const SizedBox(height: 100), // Space for bottom tab
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: _buildFloatingActionButton(context, isDark),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -463,95 +414,161 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildQuickActions(BuildContext context, bool isDark) {
     final actions = [
       {
-        'title': 'templates.title'.tr,
-        'icon': Icons.dashboard_outlined,
-        'color': const Color(0xFF6366F1),
+        'title': 'Create CV',
+        'icon': CupertinoIcons.add_circled,
+        'color': const Color(0xFF34C759),
         'onTap': () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const TemplateSelectionScreen()),
+          CupertinoPageRoute(builder: (context) => const PersonalInfoScreen()),
         ),
       },
       {
-        'title': 'personal_info.title'.tr,
-        'icon': Icons.person_outline,
-        'color': const Color(0xFF10B981),
+        'title': 'Education',
+        'icon': CupertinoIcons.book,
+        'color': const Color(0xFF007AFF),
         'onTap': () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const PersonalInfoScreen()),
+          CupertinoPageRoute(builder: (context) => const EducationScreen()),
         ),
       },
       {
-        'title': 'settings.title'.tr,
-        'icon': Icons.settings_outlined,
-        'color': const Color(0xFFF59E0B),
+        'title': 'Experience',
+        'icon': CupertinoIcons.briefcase,
+        'color': const Color(0xFFFF9500),
         'onTap': () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const SettingsScreen()),
+          CupertinoPageRoute(builder: (context) => const ExperienceScreen()),
+        ),
+      },
+      {
+        'title': 'Skills',
+        'icon': CupertinoIcons.star,
+        'color': const Color(0xFFFF3B30),
+        'onTap': () => Navigator.push(
+          context,
+          CupertinoPageRoute(builder: (context) => const SkillsScreen()),
         ),
       },
     ];
 
-    return AnimationLimiter(
-      child: Row(
-        children: AnimationConfiguration.toStaggeredList(
-          duration: const Duration(milliseconds: 400),
-          childAnimationBuilder: (widget) => SlideAnimation(
-            verticalOffset: 30.0,
-            child: FadeInAnimation(child: widget),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Quick Actions',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
+            color: isDark ? CupertinoColors.white : CupertinoColors.black,
           ),
-          children: actions.map((action) {
-            return Expanded(
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                child: GestureDetector(
-                  onTap: action['onTap'] as VoidCallback,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1F2937) : Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            color: (action['color'] as Color).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Icon(
-                            action['icon'] as IconData,
-                            color: action['color'] as Color,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          action['title'] as String,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: isDark ? Colors.white : const Color(0xFF1E293B),
-                          ),
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                actions[0]['title'] as String,
+                actions[0]['icon'] as IconData,
+                actions[0]['color'] as Color,
+                actions[0]['onTap'] as VoidCallback,
+                isDark,
               ),
-            );
-          }).toList(),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                actions[1]['title'] as String,
+                actions[1]['icon'] as IconData,
+                actions[1]['color'] as Color,
+                actions[1]['onTap'] as VoidCallback,
+                isDark,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                actions[2]['title'] as String,
+                actions[2]['icon'] as IconData,
+                actions[2]['color'] as Color,
+                actions[2]['onTap'] as VoidCallback,
+                isDark,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildQuickActionCard(
+                context,
+                actions[3]['title'] as String,
+                actions[3]['icon'] as IconData,
+                actions[3]['color'] as Color,
+                actions[3]['onTap'] as VoidCallback,
+                isDark,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildQuickActionCard(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+    bool isDark,
+  ) {
+    return CupertinoButton(
+      padding: EdgeInsets.zero,
+      onPressed: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark ? const Color(0xFF1C1C1E) : CupertinoColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDark 
+                ? const Color(0xFF38383A)
+                : const Color(0xFFD1D1D6),
+            width: 0.5,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                color: color,
+                size: 22,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: isDark ? CupertinoColors.white : CupertinoColors.black,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
       ),
     );

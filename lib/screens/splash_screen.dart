@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../services/localization_service.dart';
-import 'home_screen.dart';
+import 'main_tab_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -66,16 +67,12 @@ class _SplashScreenState extends State<SplashScreen>
       // Handle initialization error silently
     }
     
-    // Navigate to home screen after animations
+    // Navigate to main tab screen after animations
     await Future.delayed(const Duration(milliseconds: 2500));
     if (mounted) {
       Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-          transitionDuration: const Duration(milliseconds: 800),
+        CupertinoPageRoute(
+          builder: (context) => const MainTabScreen(),
         ),
       );
     }
@@ -90,13 +87,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.themeMode == ThemeMode.dark;
     
-    return Scaffold(
+    return CupertinoPageScaffold(
       backgroundColor: isDark 
-          ? const Color(0xFF0F172A) 
-          : const Color(0xFFF8FAFC),
+          ? const Color(0xFF000000) 
+          : const Color(0xFFF2F2F7),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

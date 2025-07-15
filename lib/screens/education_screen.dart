@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/cv_provider.dart';
+import '../providers/theme_provider.dart';
 import '../models/cv_data.dart';
 import '../widgets/modern_dialog.dart';
 import 'experience_screen.dart';
@@ -16,39 +18,52 @@ class EducationScreen extends StatefulWidget {
 class _EducationScreenState extends State<EducationScreen> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.themeMode == ThemeMode.dark;
     
-    return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF111827) : const Color(0xFFFAFAFA),
-      appBar: AppBar(
-        title: const Text('Education'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          Consumer<CVProvider>(
-            builder: (context, cvProvider, child) {
-              return Container(
-                margin: const EdgeInsets.only(right: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  '${(cvProvider.completionPercentage * 100).toInt()}% Complete',
-                  style: const TextStyle(
-                    color: Color(0xFF6366F1),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                  ),
-                ),
-              );
-            },
+    return CupertinoPageScaffold(
+      backgroundColor: isDark ? const Color(0xFF000000) : const Color(0xFFF2F2F7),
+      navigationBar: CupertinoNavigationBar(
+        backgroundColor: isDark 
+            ? const Color(0xFF1C1C1E).withOpacity(0.8)
+            : const Color(0xFFF2F2F7).withOpacity(0.8),
+        border: Border(
+          bottom: BorderSide(
+            color: isDark 
+                ? const Color(0xFF38383A)
+                : const Color(0xFFD1D1D6),
+            width: 0.5,
           ),
-        ],
+        ),
+        middle: Text(
+          'Education',
+          style: TextStyle(
+            color: isDark ? CupertinoColors.white : CupertinoColors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        trailing: Consumer<CVProvider>(
+          builder: (context, cvProvider, child) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF007AFF).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${(cvProvider.completionPercentage * 100).toInt()}%',
+                style: const TextStyle(
+                  color: Color(0xFF007AFF),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+            );
+          },
+        ),
       ),
-      body: Consumer<CVProvider>(
+      child: Consumer<CVProvider>(
         builder: (context, cvProvider, child) {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24),
@@ -365,23 +380,29 @@ class _EducationScreenState extends State<EducationScreen> {
   Widget _buildAddEducationButton(bool isDark) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
-      child: OutlinedButton.icon(
+      height: 50,
+      child: CupertinoButton(
         onPressed: () => _showEducationDialog(),
-        icon: const Icon(Icons.add),
-        label: const Text(
-          'Add Education',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: const Color(0xFF6366F1),
-          side: const BorderSide(color: Color(0xFF6366F1)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+        color: const Color(0xFF007AFF),
+        borderRadius: BorderRadius.circular(12),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              CupertinoIcons.add,
+              color: CupertinoColors.white,
+              size: 20,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'Add Education',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: CupertinoColors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -390,23 +411,17 @@ class _EducationScreenState extends State<EducationScreen> {
   Widget _buildContinueButton(CVProvider cvProvider) {
     return SizedBox(
       width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
+      height: 50,
+      child: CupertinoButton(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) => const ExperienceScreen(),
             ),
           );
         },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF6366F1),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
+        color: const Color(0xFF34C759),
+        borderRadius: BorderRadius.circular(12),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -415,10 +430,15 @@ class _EducationScreenState extends State<EducationScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+                color: CupertinoColors.white,
               ),
             ),
             SizedBox(width: 8),
-            Icon(Icons.arrow_forward, size: 20),
+            Icon(
+              CupertinoIcons.arrow_right,
+              color: CupertinoColors.white,
+              size: 20,
+            ),
           ],
         ),
       ),

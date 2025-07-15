@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -31,14 +32,20 @@ class CVGeneratorApp extends StatelessWidget {
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
-          return MaterialApp(
+          return CupertinoApp(
             title: 'CV Generator',
             debugShowCheckedModeBanner: false,
             
             // Theme configuration
-            theme: ThemeProvider.lightTheme,
-            darkTheme: ThemeProvider.darkTheme,
-            themeMode: themeProvider.themeMode,
+            theme: CupertinoThemeData(
+              brightness: themeProvider.themeMode == ThemeMode.dark 
+                  ? Brightness.dark 
+                  : Brightness.light,
+              primaryColor: const Color(0xFF007AFF),
+              scaffoldBackgroundColor: themeProvider.themeMode == ThemeMode.dark
+                  ? const Color(0xFF000000)
+                  : const Color(0xFFF2F2F7),
+            ),
             
             // Localization
             locale: themeProvider.locale,
@@ -69,11 +76,11 @@ class CVGeneratorApp extends StatelessWidget {
             onGenerateRoute: (settings) {
               switch (settings.name) {
                 case '/splash':
-                  return MaterialPageRoute(
+                  return CupertinoPageRoute(
                     builder: (context) => const SplashScreen(),
                   );
                 default:
-                  return MaterialPageRoute(
+                  return CupertinoPageRoute(
                     builder: (context) => const SplashScreen(),
                   );
               }
