@@ -12,7 +12,8 @@ class ThemeProvider with ChangeNotifier {
 
   bool get isDarkMode {
     if (_themeMode == ThemeMode.system) {
-      return WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+      return WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
     }
     return _themeMode == ThemeMode.dark;
   }
@@ -73,7 +74,7 @@ class ThemeProvider with ChangeNotifier {
         foregroundColor: Color(0xFF1F2937),
         surfaceTintColor: Colors.transparent,
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -124,7 +125,10 @@ class ThemeProvider with ChangeNotifier {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 16,
+        ),
       ),
       scaffoldBackgroundColor: const Color(0xFFFAFAFA),
       dividerTheme: const DividerThemeData(
@@ -157,7 +161,7 @@ class ThemeProvider with ChangeNotifier {
         foregroundColor: Color(0xFFF9FAFB),
         surfaceTintColor: Colors.transparent,
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -208,7 +212,10 @@ class ThemeProvider with ChangeNotifier {
           borderRadius: BorderRadius.circular(16),
           borderSide: const BorderSide(color: Color(0xFFEF4444), width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 16,
+        ),
       ),
       scaffoldBackgroundColor: const Color(0xFF111827),
       dividerTheme: const DividerThemeData(
