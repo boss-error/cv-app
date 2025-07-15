@@ -255,7 +255,7 @@ class FileService {
       }
       
       // Extract CV data from the text
-      return extractDataFromText(extractedText);
+      return _extractDataFromText(extractedText);
     } catch (e) {
       throw Exception('Failed to parse PDF file: \$e');
     }
@@ -281,7 +281,7 @@ class FileService {
     }
   }
 
-  CVData extractDataFromText(String content) {
+  CVData _extractDataFromText(String content) {
     final lines = content.split('\n').where((line) => line.trim().isNotEmpty).toList();
     
     String fullName = '';
