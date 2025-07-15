@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import '../providers/cv_provider.dart';
 import '../services/api_service.dart';
 
 class TaskStatusScreen extends StatefulWidget {
@@ -479,7 +477,7 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
                       ),
                       if (time != null)
                         Text(
-                          '\${time.day}/\${time.month}/\${time.year} \${time.hour}:\${time.minute.toString().padLeft(2, '0')}',
+                          '${time.day}/${time.month}/${time.year} ${time.hour}:${time.minute.toString().padLeft(2, '0')}',
                           style: TextStyle(
                             fontSize: 14,
                             color: isDark ? Colors.white70 : const Color(0xFF6B7280),
@@ -531,7 +529,7 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
                         ),
                       ),
                       Text(
-                        'Saved to: \$_downloadedFilePath',
+                        'Saved to: $_downloadedFilePath',
                         style: TextStyle(
                           fontSize: 14,
                           color: const Color(0xFF10B981),
