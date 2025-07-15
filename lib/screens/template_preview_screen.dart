@@ -18,7 +18,6 @@ class TemplatePreviewScreen extends StatefulWidget {
 }
 
 class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
-  final TemplateService _templateService = TemplateService();
   bool _showPdfPreview = true;
   Uint8List? _previewImage;
   bool _isLoading = true;
@@ -291,7 +290,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              widget.template.file,
+              widget.template.id,
               style: const TextStyle(
                 fontSize: 12,
                 color: Color(0xFF6366F1),

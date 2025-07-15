@@ -32,7 +32,6 @@ dependencies:
   image: ^4.2.0
   pdfx: ^2.9.2
   docx_to_text: ^1.0.1
-  native_pdf_renderer: ^6.0.1
   
   # Network & API
   http: ^1.2.2

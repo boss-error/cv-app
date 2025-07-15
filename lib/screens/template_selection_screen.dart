@@ -219,7 +219,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TemplatePreviewScreen(template: template),
+            builder: (context) => TemplatePreviewScreen(template: CVTemplate.fromJson(template)),
           ),
         );
       },

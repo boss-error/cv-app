@@ -422,7 +422,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'settings.version'.tr + ': 1.0.0',
+                      '${'settings.version'.tr}: 1.0.0',
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.white60 : const Color(0xFF9CA3AF),

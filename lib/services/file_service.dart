@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:crypto/crypto.dart';
 import 'package:image/image.dart' as img;
-import 'package:native_pdf_renderer/native_pdf_renderer.dart';
+import 'package:pdfx/pdfx.dart';
 import '../models/cv_data.dart';
 
 class FileService {
@@ -224,13 +224,10 @@ class FileService {
       final document = await PdfDocument.openFile(file.path);
       
       // Extract text from all pages
+      String extractedText = '';
       for (int i = 1; i <= document.pagesCount; i++) {
         final page = await document.getPage(i);
-        await page.render(
-          width: page.width.toInt(),
-          height: page.height.toInt(),
-        );
-        // Note: native_pdf_renderer doesn't extract text directly
+        // Note: pdfx doesn't extract text directly
         // This is a placeholder - in production you'd need additional text extraction
         await page.close();
       }
