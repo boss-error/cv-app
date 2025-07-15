@@ -234,8 +234,7 @@ class FileService {
       // Extract text from all pages
       for (int i = 0; i < document.pages.count; i++) {
         final String pageText = extractor.extractText(startPageIndex: i, endPageIndex: i);
-        extractedText += pageText + '
-';
+        extractedText += pageText + '';
       }
       
       // Dispose the document
