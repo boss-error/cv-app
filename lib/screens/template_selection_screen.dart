@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../services/template_service.dart';
 import '../services/localization_service.dart';
+import '../models/cv_data.dart';
 import 'template_preview_screen.dart';
 
 class TemplateSelectionScreen extends StatefulWidget {
@@ -23,10 +24,9 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
   void _loadTemplates() async {
     try {
-      final templateService = TemplateService();
-      final loadedTemplates = await templateService.getTemplates();
+      final loadedTemplates = TemplateService.getTemplates();
       setState(() {
-        templates = loadedTemplates;
+        templates = loadedTemplates.map((template) => template.toJson()).toList();
         isLoading = false;
       });
     } catch (e) {

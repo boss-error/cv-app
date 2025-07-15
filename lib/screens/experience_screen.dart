@@ -381,7 +381,7 @@ class _ExperienceScreenState extends State<ExperienceScreen> {
                   ),
                 ],
               ),
-            )).toList(),
+            )),
           ],
         ],
       ),

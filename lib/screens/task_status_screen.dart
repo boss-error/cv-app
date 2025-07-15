@@ -70,13 +70,15 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
         _isLoading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('CV downloaded successfully to \$filePath'),
-          backgroundColor: const Color(0xFF10B981),
-          duration: const Duration(seconds: 5),
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('CV downloaded successfully to $filePath'),
+            backgroundColor: const Color(0xFF10B981),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
     } catch (e) {
       setState(() {
         _error = 'Download failed: \$e';
@@ -490,7 +492,7 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
                 ),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     );

@@ -16,7 +16,6 @@ class FileUploadScreen extends StatefulWidget {
 class _FileUploadScreenState extends State<FileUploadScreen> {
   final FileService _fileService = FileService();
   File? _selectedFile;
-  bool _isUploading = false;
   bool _isProcessing = false;
   String? _error;
 
@@ -70,11 +69,13 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
       }
 
       // Navigate to next screen
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const EducationScreen(),
-        ),
-      );
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const EducationScreen(),
+          ),
+        );
+      }
     } catch (e) {
       setState(() {
         _error = 'Failed to process file: \$e';

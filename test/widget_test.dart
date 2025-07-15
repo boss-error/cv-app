@@ -1,6 +1,5 @@
 // This is a basic Flutter widget test for CV Generator App.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cv_generator_app/main.dart';

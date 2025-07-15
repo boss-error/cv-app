@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cv_provider.dart';
 import '../services/template_service.dart';
+import '../models/cv_data.dart';
 
 class TemplatePreviewScreen extends StatefulWidget {
   final CVTemplate template;
@@ -30,7 +31,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
 
   Future<void> _loadPreview() async {
     try {
-      final image = await _templateService.getTemplatePreviewImage(widget.template.id);
+      final image = await TemplateService.getTemplatePreviewImage(widget.template.id);
       setState(() {
         _previewImage = image;
         _isLoading = false;

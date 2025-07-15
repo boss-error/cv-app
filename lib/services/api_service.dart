@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -51,7 +51,7 @@ class ApiService {
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
         final message = error.response?.data?['message'] ?? 'Server error occurred';
-        throw Exception('Server error (\$statusCode): \$message');
+        throw Exception('Server error ($statusCode): $message');
       case DioExceptionType.cancel:
         throw Exception('Request was cancelled');
       case DioExceptionType.unknown:

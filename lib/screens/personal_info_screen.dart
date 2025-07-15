@@ -73,7 +73,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
       });
 
       final file = await _fileService.pickImageFromGallery();
-      if (file != null) {
+      if (file != null && mounted) {
         final cvProvider = Provider.of<CVProvider>(context, listen: false);
         cvProvider.updateProfilePhoto(file.path);
       }
@@ -96,7 +96,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
       });
 
       final file = await _fileService.pickImageFromCamera();
-      if (file != null) {
+      if (file != null && mounted) {
         final cvProvider = Provider.of<CVProvider>(context, listen: false);
         cvProvider.updateProfilePhoto(file.path);
       }

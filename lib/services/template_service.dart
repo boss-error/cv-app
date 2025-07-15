@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import '../models/cv_data.dart';
 
 class TemplateService {
-  static const String _templatesPath = 'assets/templates/';
   
   // Available templates
   static const List<Map<String, dynamic>> availableTemplates = [
@@ -98,7 +97,7 @@ class TemplateService {
   // Load template metadata
   static Future<Map<String, dynamic>> loadTemplateMetadata(String templateId) async {
     try {
-      final metaPath = '\${_templatesPath}meta-\$templateId.json';
+      final metaPath = 'assets/templates/meta-$templateId.json';
       final jsonString = await rootBundle.loadString(metaPath);
       return json.decode(jsonString);
     } catch (e) {
@@ -328,8 +327,6 @@ class TemplateService {
     // Analyze CV data to suggest appropriate templates
     final hasPhoto = cvData.personalInfo.profilePhotoPath != null;
     final hasExperience = cvData.experience.isNotEmpty;
-    final hasEducation = cvData.education.isNotEmpty;
-    final hasSkills = cvData.skills.isNotEmpty;
     
     // Tech-related skills suggest tech template
     final techSkills = ['Flutter', 'React', 'Python', 'JavaScript', 'Java', 'Swift'];

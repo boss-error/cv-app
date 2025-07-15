@@ -222,12 +222,11 @@ class FileService {
   Future<CVData> _parsePdfFile(File file) async {
     try {
       final document = await PdfDocument.openFile(file.path);
-      final StringBuffer textBuffer = StringBuffer();
       
       // Extract text from all pages
       for (int i = 1; i <= document.pagesCount; i++) {
         final page = await document.getPage(i);
-        final pageText = await page.render(
+        await page.render(
           width: page.width.toInt(),
           height: page.height.toInt(),
         );
@@ -331,7 +330,7 @@ class FileService {
 
       // Extract website
       if (website == null && (lowerLine.contains('http') || lowerLine.contains('www'))) {
-        final urlRegex = RegExp(r'https?://[\w\-\._~:/?#\[\]@!\$&'\(\)\*\+,;=]+');
+        final urlRegex = RegExp(r'https?://[\w\-\._~:/?#\[\]@!\$&\(\)\*\+,;=]+');
         final match = urlRegex.firstMatch(line);
         if (match != null) {
           website = match.group(0);
