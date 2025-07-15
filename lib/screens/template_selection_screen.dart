@@ -24,7 +24,7 @@ class _TemplateSelectionScreenState extends State<TemplateSelectionScreen> {
 
   void _loadTemplates() async {
     try {
-      final loadedTemplates = TemplateService.getTemplates();
+      final loadedTemplates = await TemplateService.getTemplates();
       setState(() {
         templates = loadedTemplates.map((template) => template.toJson()).toList();
         isLoading = false;

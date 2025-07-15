@@ -73,13 +73,12 @@ class ThemeProvider with ChangeNotifier {
         foregroundColor: Color(0xFF1F2937),
         surfaceTintColor: Colors.transparent,
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardTheme(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         color: Colors.white,
-        shadowColor: Colors.black.withOpacity(0.1),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -158,13 +157,12 @@ class ThemeProvider with ChangeNotifier {
         foregroundColor: Color(0xFFF9FAFB),
         surfaceTintColor: Colors.transparent,
       ),
-      cardTheme: CardThemeData(
+      cardTheme: const CardTheme(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
-        color: const Color(0xFF1F2937),
-        shadowColor: Colors.black.withOpacity(0.3),
+        color: Color(0xFF1F2937),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
