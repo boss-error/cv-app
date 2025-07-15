@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+import '../models/cv_data.dart';
+
+class CVProvider with ChangeNotifier {
+  CVData _cvData = CVData(
+    personalInfo: PersonalInfo(
+      fullName: '',
+      email: '',
+      phone: '',
+      address: '',
+    ),
+  );
+
+  String _currentStep = 'personal_info';
+  bool _isLoading = false;
+  String? _error;
+
+  CVData get cvData => _cvData;
+  String get currentStep => _currentStep;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  void updatePersonalInfo(PersonalInfo personalInfo) {
+    _cvData.personalInfo = personalInfo;
+    notifyListeners();
+  }
+
+  void addEducation(Education education) {
+    _cvData.education.add(education);
+    notifyListeners();
+  }
+
+  void updateEducation(int index, Education education) {
+    if (index < _cvData.education.length) {
+      _cvData.education[index] = education;
+      notifyListeners();
+    }
+  }
+
+  void removeEducation(int index) {
+    if (index < _cvData.education.length) {
+      _cvData.education.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void addExperience(Experience experience) {
+    _cvData.experience.add(experience);
+    notifyListeners();
+  }
+
+  void updateExperience(int index, Experience experience) {
+    if (index < _cvData.experience.length) {
+      _cvData.experience[index] = experience;
+      notifyListeners();
+    }
+  }
+
+  void removeExperience(int index) {
+    if (index < _cvData.experience.length) {
+      _cvData.experience.removeAt(index);
+      notifyListeners();
+    }
+  }
+
+  void updateSkills(List<String> skills) {
+    _cvData.skills = skills;
+    notifyListeners();
+  }
+
+  void addSkill(String skill) {
+    if (!_cvData.skills.contains(skill)) {
+      _cvData.skills.add(skill);
+      notifyListeners();
+    }
+  }
+
+  void removeSkill(String skill) {
+    _cvData.skills.remove(skill);
+    notifyListeners();
+  }
+
+  void updateJobInfo(String? jobTitle, String? jobRequirements) {
+    _cvData.jobTitle = jobTitle;
+    _cvData.jobRequirements = jobRequirements;
+    notifyListeners();
+  }
+
+  void selectTemplate(String templateName) {
+    _cvData.selectedTemplate = templateName;
+    notifyListeners();
+  }
+
+  void setCurrentStep(String step) {
+    _currentStep = step;
+    notifyListeners();
+  }
+
+  void setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+
+  void setError(String? error) {
+    _error = error;
+    notifyListeners();
+  }
+
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
+  void resetCV() {
+    _cvData = CVData(
+      personalInfo: PersonalInfo(
+        fullName: '',
+        email: '',
+        phone: '',
+        address: '',
+      ),
+    );
+    _currentStep = 'personal_info';
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
+
+  bool get isPersonalInfoComplete {
+    return _cvData.personalInfo.fullName.isNotEmpty &&
+           _cvData.personalInfo.email.isNotEmpty &&
+           _cvData.personalInfo.phone.isNotEmpty &&
+           _cvData.personalInfo.address.isNotEmpty;
+  }
+
+  bool get hasEducation => _cvData.education.isNotEmpty;
+  bool get hasExperience => _cvData.experience.isNotEmpty;
+  bool get hasSkills => _cvData.skills.isNotEmpty;
+  bool get hasJobInfo => _cvData.jobTitle?.isNotEmpty == true;
+  bool get hasSelectedTemplate => _cvData.selectedTemplate?.isNotEmpty == true;
+
+  double get completionPercentage {
+    int completed = 0;
+    int total = 6;
+
+    if (isPersonalInfoComplete) completed++;
+    if (hasEducation) completed++;
+    if (hasExperience) completed++;
+    if (hasSkills) completed++;
+    if (hasJobInfo) completed++;
+    if (hasSelectedTemplate) completed++;
+
+    return completed / total;
+  }
+}
