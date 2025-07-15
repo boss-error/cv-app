@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:crypto/crypto.dart';
 import 'package:image/image.dart' as img;
-import 'package:pdfx/pdfx.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
 import '../models/cv_data.dart';
 
 class FileService {
@@ -221,29 +221,41 @@ class FileService {
 
   Future<CVData> _parsePdfFile(File file) async {
     try {
-      final document = await PdfDocument.openFile(file.path);
+      // Load the PDF document using Syncfusion
+      final Uint8List bytes = await file.readAsBytes();
+      final PdfDocument document = PdfDocument(inputBytes: bytes);
       
       // Extract text from all pages
       String extractedText = '';
-      for (int i = 1; i <= document.pagesCount; i++) {
-        final page = await document.getPage(i);
-        // Note: pdfx doesn't extract text directly
-        // This is a placeholder - in production you'd need additional text extraction
-        await page.close();
+      
+      // Create text extractor
+      final PdfTextExtractor extractor = PdfTextExtractor(document);
+      
+      // Extract text from all pages
+      for (int i = 0; i < document.pages.count; i++) {
+        final String pageText = extractor.extractText(startPageIndex: i, endPageIndex: i);
+        extractedText += pageText + '
+';
       }
       
-      await document.close();
+      // Dispose the document
+      document.dispose();
       
-      // For now, return basic structure since text extraction requires additional setup
-      return CVData(
-        personalInfo: PersonalInfo(
-          fullName: 'PDF Document Uploaded',
-          email: 'email@example.com',
-          phone: '+1234567890',
-          address: 'Address from PDF',
-          profileSummary: 'CV data extracted from PDF document',
-        ),
-      );
+      // If no text was extracted, return basic structure
+      if (extractedText.trim().isEmpty) {
+        return CVData(
+          personalInfo: PersonalInfo(
+            fullName: 'PDF Document Uploaded',
+            email: 'email@example.com',
+            phone: '+1234567890',
+            address: 'Address from PDF',
+            profileSummary: 'PDF document processed but text extraction failed',
+          ),
+        );
+      }
+      
+      // Extract CV data from the text
+      return _extractDataFromText(extractedText);
     } catch (e) {
       throw Exception('Failed to parse PDF file: \$e');
     }
