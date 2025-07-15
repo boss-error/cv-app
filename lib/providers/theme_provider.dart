@@ -64,7 +64,7 @@ class ThemeProvider with ChangeNotifier {
         backgroundColor: Colors.transparent,
         foregroundColor: Color(0xFF1F2937),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -115,7 +115,7 @@ class ThemeProvider with ChangeNotifier {
         backgroundColor: Colors.transparent,
         foregroundColor: Color(0xFFF9FAFB),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),

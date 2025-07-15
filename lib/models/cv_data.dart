@@ -189,3 +189,108 @@ class Experience {
     );
   }
 }
+
+class TaskStatus {
+  final String id;
+  final String status;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final DateTime? completedAt;
+  final String? downloadUrl;
+  final String? errorMessage;
+  final double progress;
+
+  TaskStatus({
+    required this.id,
+    required this.status,
+    required this.createdAt,
+    this.updatedAt,
+    this.completedAt,
+    this.downloadUrl,
+    this.errorMessage,
+    this.progress = 0.0,
+  });
+
+  bool get isPending => status == 'pending';
+  bool get isProcessing => status == 'processing';
+  bool get isCompleted => status == 'completed';
+  bool get isFailed => status == 'failed';
+
+  factory TaskStatus.fromJson(Map<String, dynamic> json) {
+    return TaskStatus(
+      id: json['id'] ?? '',
+      status: json['status'] ?? 'pending',
+      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      completedAt: json['completedAt'] != null ? DateTime.parse(json['completedAt']) : null,
+      downloadUrl: json['downloadUrl'],
+      errorMessage: json['errorMessage'],
+      progress: (json['progress'] ?? 0.0).toDouble(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'status': status,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'downloadUrl': downloadUrl,
+      'errorMessage': errorMessage,
+      'progress': progress,
+    };
+  }
+}
+
+class CVTemplate {
+  final String id;
+  final String name;
+  final String description;
+  final String category;
+  final bool isPremium;
+  final String previewUrl;
+  final List<String> supportedSections;
+  final Map<String, dynamic> styles;
+  final Map<String, dynamic> layout;
+
+  CVTemplate({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.category,
+    this.isPremium = false,
+    required this.previewUrl,
+    this.supportedSections = const [],
+    this.styles = const {},
+    this.layout = const {},
+  });
+
+  factory CVTemplate.fromJson(Map<String, dynamic> json) {
+    return CVTemplate(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      category: json['category'] ?? 'general',
+      isPremium: json['isPremium'] ?? false,
+      previewUrl: json['preview'] ?? json['previewUrl'] ?? '',
+      supportedSections: List<String>.from(json['supportedSections'] ?? []),
+      styles: Map<String, dynamic>.from(json['styles'] ?? {}),
+      layout: Map<String, dynamic>.from(json['layout'] ?? {}),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'category': category,
+      'isPremium': isPremium,
+      'previewUrl': previewUrl,
+      'supportedSections': supportedSections,
+      'styles': styles,
+      'layout': layout,
+    };
+  }
+}

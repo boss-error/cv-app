@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../services/api_service.dart';
+import '../models/cv_data.dart';
 
 class TaskStatusScreen extends StatefulWidget {
   final String taskId;
@@ -168,9 +169,9 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
         children: [
           Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.tag,
-                color: const Color(0xFF6366F1),
+                color: Color(0xFF6366F1),
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -253,10 +254,10 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: const Color(0xFFEF4444).withOpacity(0.1),
+          color: const Color(0xFFEF4444).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: const Color(0xFFEF4444).withOpacity(0.3),
+            color: const Color(0xFFEF4444).withValues(alpha: 0.3),
           ),
         ),
         child: Column(
@@ -337,7 +338,7 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: statusColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
@@ -502,10 +503,10 @@ class _TaskStatusScreenState extends State<TaskStatusScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFF10B981).withOpacity(0.1),
+              color: const Color(0xFF10B981).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: const Color(0xFF10B981).withOpacity(0.3),
+                color: const Color(0xFF10B981).withValues(alpha: 0.3),
               ),
             ),
             child: Row(

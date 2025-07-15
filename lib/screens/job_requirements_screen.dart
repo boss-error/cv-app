@@ -69,7 +69,7 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
                 margin: const EdgeInsets.only(right: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -206,7 +206,7 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -303,7 +303,7 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF10B981).withOpacity(0.1),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -383,10 +383,10 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF3B82F6).withOpacity(0.1),
+        color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFF3B82F6).withOpacity(0.3),
+          color: const Color(0xFF3B82F6).withValues(alpha: 0.3),
         ),
       ),
       child: Column(
@@ -394,11 +394,11 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.lightbulb_outline,
-                color: const Color(0xFF3B82F6),
-                size: 24,
-              ),
+               const Icon(
+                 Icons.lightbulb_outline,
+                 color: Color(0xFF3B82F6),
+                 size: 24,
+               ),
               const SizedBox(width: 12),
               Text(
                 'Why provide job requirements?',

@@ -244,6 +244,35 @@ class ApiService {
     }
   }
   
+  // Task Status APIs
+  Future<TaskStatus> getTaskStatus(String taskId) async {
+    try {
+      final response = await _dio.get('/tasks/\$taskId/status');
+      return TaskStatus.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to get task status: \$e');
+    }
+  }
+  
+  Future<String> downloadCV(String downloadUrl, String fileName) async {
+    try {
+      final response = await _dio.get(
+        downloadUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+      
+      final appDir = await getApplicationDocumentsDirectory();
+      final file = File(path.join(appDir.path, 'downloads', fileName));
+      
+      await file.parent.create(recursive: true);
+      await file.writeAsBytes(response.data);
+      
+      return file.path;
+    } catch (e) {
+      throw Exception('Failed to download CV: \$e');
+    }
+  }
+
   void dispose() {
     _dio.close();
   }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import '../models/cv_data.dart';
 
@@ -418,5 +419,24 @@ class TemplateService {
         'skills',
       ],
     };
+  }
+
+  // Get templates as CVTemplate objects
+  static List<CVTemplate> getTemplates() {
+    return availableTemplates.map((template) => CVTemplate.fromJson(template)).toList();
+  }
+
+  // Get template preview image
+  static Future<Uint8List?> getTemplatePreviewImage(String templateId) async {
+    try {
+      final template = getTemplateById(templateId);
+      if (template == null) return null;
+      
+      final previewPath = template['preview'] as String;
+      final byteData = await rootBundle.load(previewPath);
+      return byteData.buffer.asUint8List();
+    } catch (e) {
+      return null;
+    }
   }
 }
