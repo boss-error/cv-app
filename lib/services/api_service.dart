@@ -32,15 +32,17 @@ class ApiService {
   }) async {
     try {
       final response = await _dio.post(
-        '/generate-cv',
+        '/create-cv',
         data: {
-          'cvData': cvData.toJson(),
-          'templateName': templateName,
+          'data': cvData.toJson(),
+          'template': templateName,
+          'job_title': cvData.jobTitle ?? '',
+          'requirements': cvData.jobRequirements ?? '',
         },
       );
 
       if (response.statusCode == 200) {
-        return response.data['taskId'] as String;
+        return response.data['task_id'] as String;
       } else {
         throw Exception('Failed to generate CV: \${response.statusMessage}');
       }
@@ -53,7 +55,7 @@ class ApiService {
 
   Future<TaskStatus> getTaskStatus(String taskId) async {
     try {
-      final response = await _dio.get('/task-status/\$taskId');
+      final response = await _dio.get('/task/\$taskId');
 
       if (response.statusCode == 200) {
         return TaskStatus.fromJson(response.data);

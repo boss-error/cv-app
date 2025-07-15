@@ -3,16 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../providers/cv_provider.dart';
 import '../models/cv_data.dart';
-import 'experience_screen.dart';
+import 'skills_screen.dart';
 
-class EducationScreen extends StatefulWidget {
-  const EducationScreen({super.key});
+class ExperienceScreen extends StatefulWidget {
+  const ExperienceScreen({super.key});
 
   @override
-  State<EducationScreen> createState() => _EducationScreenState();
+  State<ExperienceScreen> createState() => _ExperienceScreenState();
 }
 
-class _EducationScreenState extends State<EducationScreen> {
+class _ExperienceScreenState extends State<ExperienceScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -21,7 +21,7 @@ class _EducationScreenState extends State<EducationScreen> {
     return Scaffold(
       backgroundColor: isDark ? const Color(0xFF111827) : const Color(0xFFFAFAFA),
       appBar: AppBar(
-        title: const Text('Education'),
+        title: const Text('Work Experience'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
@@ -68,7 +68,7 @@ class _EducationScreenState extends State<EducationScreen> {
                     
                     // Header
                     Text(
-                      'Education Background',
+                      'Work Experience',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class _EducationScreenState extends State<EducationScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Add your educational qualifications and achievements',
+                      'Add your professional work experience and achievements',
                       style: TextStyle(
                         fontSize: 16,
                         color: isDark ? Colors.white70 : const Color(0xFF6B7280),
@@ -86,13 +86,13 @@ class _EducationScreenState extends State<EducationScreen> {
                     
                     const SizedBox(height: 32),
                     
-                    // Education list
-                    _buildEducationList(cvProvider, isDark),
+                    // Experience list
+                    _buildExperienceList(cvProvider, isDark),
                     
                     const SizedBox(height: 24),
                     
-                    // Add education button
-                    _buildAddEducationButton(isDark),
+                    // Add experience button
+                    _buildAddExperienceButton(isDark),
                     
                     const SizedBox(height: 40),
                     
@@ -116,7 +116,7 @@ class _EducationScreenState extends State<EducationScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Step 2 of 6',
+              'Step 3 of 6',
               style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).brightness == Brightness.dark 
@@ -125,7 +125,7 @@ class _EducationScreenState extends State<EducationScreen> {
               ),
             ),
             const Text(
-              'Education',
+              'Experience',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
@@ -136,7 +136,7 @@ class _EducationScreenState extends State<EducationScreen> {
         ),
         const SizedBox(height: 8),
         LinearProgressIndicator(
-          value: 2/6,
+          value: 3/6,
           backgroundColor: const Color(0xFFE5E7EB),
           valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF6366F1)),
           minHeight: 4,
@@ -145,8 +145,8 @@ class _EducationScreenState extends State<EducationScreen> {
     );
   }
 
-  Widget _buildEducationList(CVProvider cvProvider, bool isDark) {
-    if (cvProvider.cvData.education.isEmpty) {
+  Widget _buildExperienceList(CVProvider cvProvider, bool isDark) {
+    if (cvProvider.cvData.experience.isEmpty) {
       return Container(
         width: double.infinity,
         padding: const EdgeInsets.all(32),
@@ -160,13 +160,13 @@ class _EducationScreenState extends State<EducationScreen> {
         child: Column(
           children: [
             Icon(
-              Icons.school_outlined,
+              Icons.work_outline,
               size: 64,
               color: isDark ? Colors.white54 : const Color(0xFF9CA3AF),
             ),
             const SizedBox(height: 16),
             Text(
-              'No Education Added Yet',
+              'No Experience Added Yet',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -175,7 +175,7 @@ class _EducationScreenState extends State<EducationScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Add your educational background to strengthen your CV',
+              'Add your work experience to showcase your professional journey',
               style: TextStyle(
                 fontSize: 14,
                 color: isDark ? Colors.white70 : const Color(0xFF6B7280),
@@ -188,18 +188,18 @@ class _EducationScreenState extends State<EducationScreen> {
     }
 
     return Column(
-      children: cvProvider.cvData.education.asMap().entries.map((entry) {
+      children: cvProvider.cvData.experience.asMap().entries.map((entry) {
         final index = entry.key;
-        final education = entry.value;
+        final experience = entry.value;
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
-          child: _buildEducationCard(education, index, cvProvider, isDark),
+          child: _buildExperienceCard(experience, index, cvProvider, isDark),
         );
       }).toList(),
     );
   }
 
-  Widget _buildEducationCard(Education education, int index, CVProvider cvProvider, bool isDark) {
+  Widget _buildExperienceCard(Experience experience, int index, CVProvider cvProvider, bool isDark) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -227,12 +227,12 @@ class _EducationScreenState extends State<EducationScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withOpacity(0.1),
+                  color: const Color(0xFF10B981).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
-                  Icons.school,
-                  color: Color(0xFF6366F1),
+                  Icons.work,
+                  color: Color(0xFF10B981),
                   size: 24,
                 ),
               ),
@@ -242,7 +242,7 @@ class _EducationScreenState extends State<EducationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      education.degree,
+                      experience.position,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -251,7 +251,7 @@ class _EducationScreenState extends State<EducationScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      education.institution,
+                      experience.company,
                       style: TextStyle(
                         fontSize: 14,
                         color: isDark ? Colors.white70 : const Color(0xFF6B7280),
@@ -260,12 +260,29 @@ class _EducationScreenState extends State<EducationScreen> {
                   ],
                 ),
               ),
+              if (experience.isCurrentJob)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Current',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF10B981),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 8),
               PopupMenuButton<String>(
                 onSelected: (value) {
                   if (value == 'edit') {
-                    _showEducationDialog(education: education, index: index);
+                    _showExperienceDialog(experience: experience, index: index);
                   } else if (value == 'delete') {
-                    cvProvider.removeEducation(index);
+                    cvProvider.removeExperience(index);
                   }
                 },
                 itemBuilder: (context) => [
@@ -303,22 +320,22 @@ class _EducationScreenState extends State<EducationScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                '\${education.startDate} - \${education.endDate}',
+                '\${experience.startDate} - \${experience.isCurrentJob ? "Present" : experience.endDate}',
                 style: TextStyle(
                   fontSize: 14,
                   color: isDark ? Colors.white70 : const Color(0xFF6B7280),
                 ),
               ),
-              if (education.gpa?.isNotEmpty == true) ...[
+              if (experience.location?.isNotEmpty == true) ...[
                 const SizedBox(width: 16),
                 Icon(
-                  Icons.star,
+                  Icons.location_on,
                   size: 16,
                   color: isDark ? Colors.white54 : const Color(0xFF9CA3AF),
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'GPA: \${education.gpa}',
+                  experience.location!,
                   style: TextStyle(
                     fontSize: 14,
                     color: isDark ? Colors.white70 : const Color(0xFF6B7280),
@@ -327,49 +344,59 @@ class _EducationScreenState extends State<EducationScreen> {
               ],
             ],
           ),
-          if (education.fieldOfStudy.isNotEmpty) ...[
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                education.fieldOfStudy,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF6366F1),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-          if (education.description?.isNotEmpty == true) ...[
-            const SizedBox(height: 12),
+          if (experience.responsibilities.isNotEmpty) ...[
+            const SizedBox(height: 16),
             Text(
-              education.description!,
+              'Key Responsibilities:',
               style: TextStyle(
                 fontSize: 14,
-                color: isDark ? Colors.white70 : const Color(0xFF6B7280),
-                height: 1.5,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white : const Color(0xFF1F2937),
               ),
             ),
+            const SizedBox(height: 8),
+            ...experience.responsibilities.map((responsibility) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 4,
+                    height: 4,
+                    margin: const EdgeInsets.only(top: 8, right: 8),
+                    decoration: BoxDecoration(
+                      color: isDark ? Colors.white54 : const Color(0xFF9CA3AF),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      responsibility,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: isDark ? Colors.white70 : const Color(0xFF6B7280),
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )).toList(),
           ],
         ],
       ),
     );
   }
 
-  Widget _buildAddEducationButton(bool isDark) {
+  Widget _buildAddExperienceButton(bool isDark) {
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: OutlinedButton.icon(
-        onPressed: () => _showEducationDialog(),
+        onPressed: () => _showExperienceDialog(),
         icon: const Icon(Icons.add),
         label: const Text(
-          'Add Education',
+          'Add Experience',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -394,7 +421,7 @@ class _EducationScreenState extends State<EducationScreen> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const ExperienceScreen(),
+              builder: (context) => const SkillsScreen(),
             ),
           );
         },
@@ -410,7 +437,7 @@ class _EducationScreenState extends State<EducationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Continue to Experience',
+              'Continue to Skills',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -424,121 +451,140 @@ class _EducationScreenState extends State<EducationScreen> {
     );
   }
 
-  void _showEducationDialog({Education? education, int? index}) {
-    final isEditing = education != null;
-    final institutionController = TextEditingController(text: education?.institution ?? '');
-    final degreeController = TextEditingController(text: education?.degree ?? '');
-    final fieldController = TextEditingController(text: education?.fieldOfStudy ?? '');
-    final startDateController = TextEditingController(text: education?.startDate ?? '');
-    final endDateController = TextEditingController(text: education?.endDate ?? '');
-    final gpaController = TextEditingController(text: education?.gpa ?? '');
-    final descriptionController = TextEditingController(text: education?.description ?? '');
+  void _showExperienceDialog({Experience? experience, int? index}) {
+    final isEditing = experience != null;
+    final companyController = TextEditingController(text: experience?.company ?? '');
+    final positionController = TextEditingController(text: experience?.position ?? '');
+    final locationController = TextEditingController(text: experience?.location ?? '');
+    final startDateController = TextEditingController(text: experience?.startDate ?? '');
+    final endDateController = TextEditingController(text: experience?.endDate ?? '');
+    final responsibilitiesController = TextEditingController(
+      text: experience?.responsibilities.join('\n') ?? ''
+    );
+    bool isCurrentJob = experience?.isCurrentJob ?? false;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(isEditing ? 'Edit Education' : 'Add Education'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: institutionController,
-                decoration: const InputDecoration(
-                  labelText: 'Institution',
-                  hintText: 'University/School name',
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(isEditing ? 'Edit Experience' : 'Add Experience'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: companyController,
+                  decoration: const InputDecoration(
+                    labelText: 'Company',
+                    hintText: 'Company name',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: degreeController,
-                decoration: const InputDecoration(
-                  labelText: 'Degree',
-                  hintText: 'Bachelor of Science, Master of Arts, etc.',
+                const SizedBox(height: 16),
+                TextField(
+                  controller: positionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Position',
+                    hintText: 'Job title',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: fieldController,
-                decoration: const InputDecoration(
-                  labelText: 'Field of Study',
-                  hintText: 'Computer Science, Business, etc.',
+                const SizedBox(height: 16),
+                TextField(
+                  controller: locationController,
+                  decoration: const InputDecoration(
+                    labelText: 'Location (Optional)',
+                    hintText: 'City, Country',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: startDateController,
-                      decoration: const InputDecoration(
-                        labelText: 'Start Date',
-                        hintText: 'MM/YYYY',
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: startDateController,
+                        decoration: const InputDecoration(
+                          labelText: 'Start Date',
+                          hintText: 'MM/YYYY',
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: TextField(
-                      controller: endDateController,
-                      decoration: const InputDecoration(
-                        labelText: 'End Date',
-                        hintText: 'MM/YYYY or Present',
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: TextField(
+                        controller: endDateController,
+                        enabled: !isCurrentJob,
+                        decoration: InputDecoration(
+                          labelText: 'End Date',
+                          hintText: isCurrentJob ? 'Present' : 'MM/YYYY',
+                        ),
                       ),
                     ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                CheckboxListTile(
+                  title: const Text('I currently work here'),
+                  value: isCurrentJob,
+                  onChanged: (value) {
+                    setState(() {
+                      isCurrentJob = value ?? false;
+                      if (isCurrentJob) {
+                        endDateController.clear();
+                      }
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: responsibilitiesController,
+                  maxLines: 5,
+                  decoration: const InputDecoration(
+                    labelText: 'Responsibilities',
+                    hintText: 'Enter each responsibility on a new line',
+                    alignLabelWithHint: true,
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: gpaController,
-                decoration: const InputDecoration(
-                  labelText: 'GPA (Optional)',
-                  hintText: '3.8/4.0',
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: descriptionController,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Description (Optional)',
-                  hintText: 'Relevant coursework, achievements, etc.',
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final responsibilities = responsibilitiesController.text
+                    .split('\n')
+                    .map((r) => r.trim())
+                    .where((r) => r.isNotEmpty)
+                    .toList();
+
+                final newExperience = Experience(
+                  company: companyController.text.trim(),
+                  position: positionController.text.trim(),
+                  location: locationController.text.trim().isEmpty ? null : locationController.text.trim(),
+                  startDate: startDateController.text.trim(),
+                  endDate: isCurrentJob ? '' : endDateController.text.trim(),
+                  responsibilities: responsibilities,
+                  isCurrentJob: isCurrentJob,
+                );
+
+                final cvProvider = Provider.of<CVProvider>(context, listen: false);
+                
+                if (isEditing && index != null) {
+                  cvProvider.updateExperience(index, newExperience);
+                } else {
+                  cvProvider.addExperience(newExperience);
+                }
+
+                Navigator.of(context).pop();
+              },
+              child: Text(isEditing ? 'Update' : 'Add'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final newEducation = Education(
-                institution: institutionController.text.trim(),
-                degree: degreeController.text.trim(),
-                fieldOfStudy: fieldController.text.trim(),
-                startDate: startDateController.text.trim(),
-                endDate: endDateController.text.trim(),
-                gpa: gpaController.text.trim().isEmpty ? null : gpaController.text.trim(),
-                description: descriptionController.text.trim().isEmpty ? null : descriptionController.text.trim(),
-              );
-
-              final cvProvider = Provider.of<CVProvider>(context, listen: false);
-              
-              if (isEditing && index != null) {
-                cvProvider.updateEducation(index, newEducation);
-              } else {
-                cvProvider.addEducation(newEducation);
-              }
-
-              Navigator.of(context).pop();
-            },
-            child: Text(isEditing ? 'Update' : 'Add'),
-          ),
-        ],
       ),
     );
   }

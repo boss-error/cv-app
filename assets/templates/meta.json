@@ -1,0 +1,46 @@
+{
+  "templates": [
+    {
+      "id": "template1",
+      "name": "Modern Blue",
+      "description": "Clean, modern design with blue accent colors.",
+      "file": "template1.pdf",
+      "checksum": "abc123def456"
+    },
+    {
+      "id": "template2", 
+      "name": "Classic Gray",
+      "description": "Elegant classic template with gray tones.",
+      "file": "template2.pdf",
+      "checksum": "def456ghi789"
+    },
+    {
+      "id": "template3",
+      "name": "Creative Colorful", 
+      "description": "Bright and colorful design, great for creative roles.",
+      "file": "template3.pdf",
+      "checksum": "ghi789jkl012"
+    },
+    {
+      "id": "template4",
+      "name": "Professional Black",
+      "description": "Sophisticated black and white professional template.",
+      "file": "template4.pdf", 
+      "checksum": "jkl012mno345"
+    },
+    {
+      "id": "template5",
+      "name": "Minimalist White",
+      "description": "Clean minimalist design with plenty of white space.",
+      "file": "template5.pdf",
+      "checksum": "mno345pqr678"
+    },
+    {
+      "id": "template6",
+      "name": "Tech Green",
+      "description": "Modern tech-focused template with green accents.",
+      "file": "template6.pdf",
+      "checksum": "pqr678stu901"
+    }
+  ]
+}

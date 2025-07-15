@@ -74,6 +74,8 @@ flutter:
   assets:
     - assets/images/
     - assets/templates/
+    - assets/templates/meta.json
+    - assets/templates/previews/
     - assets/animations/
     - assets/icons/
 
