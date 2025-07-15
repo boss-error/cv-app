@@ -25,6 +25,16 @@ class CVProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateProfilePhoto(String? photoPath) {
+    _cvData.personalInfo.profilePhotoPath = photoPath;
+    notifyListeners();
+  }
+
+  void removeProfilePhoto() {
+    _cvData.personalInfo.profilePhotoPath = null;
+    notifyListeners();
+  }
+
   void addEducation(Education education) {
     _cvData.education.add(education);
     notifyListeners();

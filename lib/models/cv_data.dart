@@ -54,6 +54,9 @@ class PersonalInfo {
   String? profileSummary;
   String? linkedIn;
   String? website;
+  String? profilePhotoPath;
+  String? github;
+  String? portfolio;
 
   PersonalInfo({
     required this.fullName,
@@ -63,6 +66,9 @@ class PersonalInfo {
     this.profileSummary,
     this.linkedIn,
     this.website,
+    this.profilePhotoPath,
+    this.github,
+    this.portfolio,
   });
 
   Map<String, dynamic> toJson() {
@@ -74,6 +80,9 @@ class PersonalInfo {
       'profileSummary': profileSummary,
       'linkedIn': linkedIn,
       'website': website,
+      'profilePhotoPath': profilePhotoPath,
+      'github': github,
+      'portfolio': portfolio,
     };
   }
 
@@ -86,6 +95,9 @@ class PersonalInfo {
       profileSummary: json['profileSummary'],
       linkedIn: json['linkedIn'],
       website: json['website'],
+      profilePhotoPath: json['profilePhotoPath'],
+      github: json['github'],
+      portfolio: json['portfolio'],
     );
   }
 }

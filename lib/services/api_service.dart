@@ -1,12 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import '../models/cv_data.dart';
 
 class ApiService {
-  static const String baseUrl = 'https://api.cvgenerator.com'; // Replace with actual API URL
-  late Dio _dio;
-
+  static const String baseUrl = 'https://api.cvgenerator.com'; // Replace with actual API
+  late final Dio _dio;
+  
   ApiService() {
     _dio = Dio(BaseOptions(
       baseUrl: baseUrl,
@@ -17,160 +19,232 @@ class ApiService {
         'Accept': 'application/json',
       },
     ));
-
-    // Add interceptors for logging
-    _dio.interceptors.add(LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      logPrint: (obj) => print(obj),
-    ));
+    
+    _setupInterceptors();
   }
-
-  Future<String> generateCV({
-    required CVData cvData,
-    required String templateName,
-  }) async {
-    try {
-      final response = await _dio.post(
-        '/create-cv',
-        data: {
-          'data': cvData.toJson(),
-          'template': templateName,
-          'job_title': cvData.jobTitle ?? '',
-          'requirements': cvData.jobRequirements ?? '',
+  
+  void _setupInterceptors() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          // Add authentication token if available
+          // options.headers['Authorization'] = 'Bearer \$token';
+          handler.next(options);
         },
-      );
-
-      if (response.statusCode == 200) {
-        return response.data['task_id'] as String;
-      } else {
-        throw Exception('Failed to generate CV: \${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Network error: \${e.message}');
-    } catch (e) {
-      throw Exception('Unexpected error: \$e');
-    }
-  }
-
-  Future<TaskStatus> getTaskStatus(String taskId) async {
-    try {
-      final response = await _dio.get('/task/\$taskId');
-
-      if (response.statusCode == 200) {
-        return TaskStatus.fromJson(response.data);
-      } else {
-        throw Exception('Failed to get task status: \${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Network error: \${e.message}');
-    } catch (e) {
-      throw Exception('Unexpected error: \$e');
-    }
-  }
-
-  Future<String> downloadCV(String downloadUrl, String fileName) async {
-    try {
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '\${directory.path}/\$fileName';
-
-      await _dio.download(
-        downloadUrl,
-        filePath,
-        onReceiveProgress: (received, total) {
-          if (total != -1) {
-            print('Download progress: \${(received / total * 100).toStringAsFixed(0)}%');
-          }
+        onResponse: (response, handler) {
+          handler.next(response);
         },
-      );
-
-      return filePath;
-    } on DioException catch (e) {
-      throw Exception('Download failed: \${e.message}');
-    } catch (e) {
-      throw Exception('Unexpected error: \$e');
+        onError: (error, handler) {
+          _handleError(error);
+          handler.next(error);
+        },
+      ),
+    );
+  }
+  
+  void _handleError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        throw Exception('Connection timeout. Please check your internet connection.');
+      case DioExceptionType.badResponse:
+        final statusCode = error.response?.statusCode;
+        final message = error.response?.data?['message'] ?? 'Server error occurred';
+        throw Exception('Server error (\$statusCode): \$message');
+      case DioExceptionType.cancel:
+        throw Exception('Request was cancelled');
+      case DioExceptionType.unknown:
+        throw Exception('Network error occurred. Please try again.');
+      default:
+        throw Exception('An unexpected error occurred');
     }
   }
-
-  Future<List<CVTemplate>> getTemplates() async {
+  
+  // CV Management APIs
+  Future<Map<String, dynamic>> saveCVData(CVData cvData) async {
+    try {
+      final response = await _dio.post('/cv/save', data: cvData.toJson());
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to save CV data: \$e');
+    }
+  }
+  
+  Future<CVData> loadCVData(String cvId) async {
+    try {
+      final response = await _dio.get('/cv/\$cvId');
+      return CVData.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to load CV data: \$e');
+    }
+  }
+  
+  Future<List<Map<String, dynamic>>> getUserCVs(String userId) async {
+    try {
+      final response = await _dio.get('/cv/user/\$userId');
+      return List<Map<String, dynamic>>.from(response.data);
+    } catch (e) {
+      throw Exception('Failed to load user CVs: \$e');
+    }
+  }
+  
+  // Template APIs
+  Future<List<Map<String, dynamic>>> getTemplates() async {
     try {
       final response = await _dio.get('/templates');
-
-      if (response.statusCode == 200) {
-        final List<dynamic> templatesJson = response.data['templates'];
-        return templatesJson.map((json) => CVTemplate.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to get templates: \${response.statusMessage}');
-      }
-    } on DioException catch (e) {
-      throw Exception('Network error: \${e.message}');
+      return List<Map<String, dynamic>>.from(response.data);
     } catch (e) {
-      throw Exception('Unexpected error: \$e');
+      throw Exception('Failed to load templates: \$e');
     }
   }
-}
-
-class TaskStatus {
-  final String taskId;
-  final String status; // 'pending', 'processing', 'completed', 'failed'
-  final String? downloadUrl;
-  final String? errorMessage;
-  final DateTime createdAt;
-  final DateTime? completedAt;
-
-  TaskStatus({
-    required this.taskId,
-    required this.status,
-    this.downloadUrl,
-    this.errorMessage,
-    required this.createdAt,
-    this.completedAt,
-  });
-
-  factory TaskStatus.fromJson(Map<String, dynamic> json) {
-    return TaskStatus(
-      taskId: json['taskId'],
-      status: json['status'],
-      downloadUrl: json['downloadUrl'],
-      errorMessage: json['errorMessage'],
-      createdAt: DateTime.parse(json['createdAt']),
-      completedAt: json['completedAt'] != null 
-          ? DateTime.parse(json['completedAt']) 
-          : null,
-    );
+  
+  Future<Map<String, dynamic>> getTemplate(String templateId) async {
+    try {
+      final response = await _dio.get('/templates/\$templateId');
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to load template: \$e');
+    }
   }
-
-  bool get isPending => status == 'pending';
-  bool get isProcessing => status == 'processing';
-  bool get isCompleted => status == 'completed';
-  bool get isFailed => status == 'failed';
-}
-
-class CVTemplate {
-  final String id;
-  final String name;
-  final String description;
-  final String previewUrl;
-  final String category;
-  final bool isPremium;
-
-  CVTemplate({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.previewUrl,
-    required this.category,
-    this.isPremium = false,
-  });
-
-  factory CVTemplate.fromJson(Map<String, dynamic> json) {
-    return CVTemplate(
-      id: json['id'],
-      name: json['name'],
-      description: json['description'],
-      previewUrl: json['previewUrl'],
-      category: json['category'],
-      isPremium: json['isPremium'] ?? false,
-    );
+  
+  // PDF Generation APIs
+  Future<File> generatePDF(CVData cvData, String templateId) async {
+    try {
+      final response = await _dio.post(
+        '/cv/generate-pdf',
+        data: {
+          'cvData': cvData.toJson(),
+          'templateId': templateId,
+        },
+        options: Options(responseType: ResponseType.bytes),
+      );
+      
+      final appDir = await getApplicationDocumentsDirectory();
+      final fileName = 'cv_\${DateTime.now().millisecondsSinceEpoch}.pdf';
+      final file = File(path.join(appDir.path, 'generated', fileName));
+      
+      await file.parent.create(recursive: true);
+      await file.writeAsBytes(response.data);
+      
+      return file;
+    } catch (e) {
+      throw Exception('Failed to generate PDF: \$e');
+    }
+  }
+  
+  // Job Matching APIs
+  Future<Map<String, dynamic>> analyzeJobRequirements(String jobDescription) async {
+    try {
+      final response = await _dio.post('/jobs/analyze', data: {
+        'description': jobDescription,
+      });
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to analyze job requirements: \$e');
+    }
+  }
+  
+  Future<Map<String, dynamic>> getOptimizationSuggestions(
+    CVData cvData, 
+    String jobDescription,
+  ) async {
+    try {
+      final response = await _dio.post('/cv/optimize', data: {
+        'cvData': cvData.toJson(),
+        'jobDescription': jobDescription,
+      });
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get optimization suggestions: \$e');
+    }
+  }
+  
+  // File Upload APIs
+  Future<Map<String, dynamic>> uploadFile(File file) async {
+    try {
+      final fileName = path.basename(file.path);
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(file.path, filename: fileName),
+      });
+      
+      final response = await _dio.post('/upload', data: formData);
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to upload file: \$e');
+    }
+  }
+  
+  Future<CVData> parseUploadedFile(String fileId) async {
+    try {
+      final response = await _dio.post('/files/parse', data: {
+        'fileId': fileId,
+      });
+      return CVData.fromJson(response.data);
+    } catch (e) {
+      throw Exception('Failed to parse uploaded file: \$e');
+    }
+  }
+  
+  // Skills and Industry APIs
+  Future<List<String>> getSkillSuggestions(String query) async {
+    try {
+      final response = await _dio.get('/skills/suggestions', queryParameters: {
+        'q': query,
+        'limit': 10,
+      });
+      return List<String>.from(response.data);
+    } catch (e) {
+      throw Exception('Failed to get skill suggestions: \$e');
+    }
+  }
+  
+  Future<List<String>> getIndustrySuggestions() async {
+    try {
+      final response = await _dio.get('/industries');
+      return List<String>.from(response.data);
+    } catch (e) {
+      throw Exception('Failed to get industry suggestions: \$e');
+    }
+  }
+  
+  // Analytics APIs
+  Future<Map<String, dynamic>> getCVAnalytics(String cvId) async {
+    try {
+      final response = await _dio.get('/cv/\$cvId/analytics');
+      return response.data;
+    } catch (e) {
+      throw Exception('Failed to get CV analytics: \$e');
+    }
+  }
+  
+  Future<void> trackCVView(String cvId) async {
+    try {
+      await _dio.post('/cv/\$cvId/view');
+    } catch (e) {
+      // Ignore tracking errors
+    }
+  }
+  
+  Future<void> trackCVDownload(String cvId) async {
+    try {
+      await _dio.post('/cv/\$cvId/download');
+    } catch (e) {
+      // Ignore tracking errors
+    }
+  }
+  
+  // Utility methods
+  Future<bool> checkServerHealth() async {
+    try {
+      final response = await _dio.get('/health');
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+  
+  void dispose() {
+    _dio.close();
   }
 }

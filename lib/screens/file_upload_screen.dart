@@ -26,7 +26,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
         _error = null;
       });
 
-      final file = await _fileService.pickFile();
+      final file = await _fileService.pickDocument();
       if (file != null) {
         setState(() {
           _selectedFile = file;
@@ -48,7 +48,7 @@ class _FileUploadScreenState extends State<FileUploadScreen> {
     });
 
     try {
-      final cvData = await _fileService.parseFile(_selectedFile!);
+      final cvData = await _fileService.parseDocument(_selectedFile!);
       
       // Update the CV provider with parsed data
       final cvProvider = Provider.of<CVProvider>(context, listen: false);
