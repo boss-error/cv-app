@@ -233,8 +233,8 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.black.withValues(alpha: 0.05),
+                ? Colors.black.withOpacity(0.2)
+                : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -286,7 +286,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+              color: const Color(0xFF6366F1).withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -338,7 +338,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: color.withValues(alpha: 0.05),
+      color: color.withOpacity(0.05),
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
@@ -370,7 +370,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
               width: double.infinity,
               height: 20,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.2),
+                color: color.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -398,7 +398,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
                        width: double.infinity,
                        height: 12,
                        decoration: BoxDecoration(
-                         color: color.withValues(alpha: 0.1),
+                         color: color.withOpacity(0.1),
                          borderRadius: BorderRadius.circular(4),
                        ),
                      ),
@@ -422,7 +422,7 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
                        width: double.infinity,
                        height: 12,
                        decoration: BoxDecoration(
-                         color: color.withValues(alpha: 0.1),
+                         color: color.withOpacity(0.1),
                          borderRadius: BorderRadius.circular(4),
                        ),
                      ),
@@ -482,8 +482,8 @@ class _TemplatePreviewScreenState extends State<TemplatePreviewScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: isSelected 
-                          ? const Color(0xFF10B981).withValues(alpha: 0.1)
-                          : const Color(0xFF6366F1).withValues(alpha: 0.1),
+                          ? const Color(0xFF10B981).withOpacity(0.1)
+                          : const Color(0xFF6366F1).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

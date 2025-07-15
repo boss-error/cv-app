@@ -31,7 +31,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 margin: const EdgeInsets.only(right: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                  color: const Color(0xFF6366F1).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -211,8 +211,8 @@ class _EducationScreenState extends State<EducationScreen> {
         boxShadow: [
           BoxShadow(
             color: isDark 
-                ? Colors.black.withValues(alpha: 0.2)
-                : Colors.black.withValues(alpha: 0.05),
+                ? Colors.black.withOpacity(0.2)
+                : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -227,7 +227,7 @@ class _EducationScreenState extends State<EducationScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                  color: const Color(0xFF6366F1).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
@@ -332,7 +332,7 @@ class _EducationScreenState extends State<EducationScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                color: const Color(0xFF6366F1).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

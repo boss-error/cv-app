@@ -141,7 +141,7 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                            color: const Color(0xFF6366F1).withOpacity(0.3),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -179,7 +179,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         fontSize: 16,
                         color: isDark 
-                            ? Colors.white.withValues(alpha: 0.7) 
+                            ? Colors.white.withOpacity(0.7) 
                             : const Color(0xFF64748B),
                         letterSpacing: 0.5,
                       ),
@@ -209,7 +209,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         fontSize: 14,
                         color: isDark 
-                            ? Colors.white.withValues(alpha: 0.6) 
+                            ? Colors.white.withOpacity(0.6) 
                             : const Color(0xFF64748B),
                         letterSpacing: 0.8,
                       ),

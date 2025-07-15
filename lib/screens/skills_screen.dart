@@ -45,7 +45,7 @@ class _SkillsScreenState extends State<SkillsScreen> {
                 margin: const EdgeInsets.only(right: 16),
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                  color: const Color(0xFF6366F1).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -325,10 +325,10 @@ class _SkillsScreenState extends State<SkillsScreen> {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF6366F1).withValues(alpha: 0.1),
+                  color: const Color(0xFF6366F1).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: const Color(0xFF6366F1).withValues(alpha: 0.3),
+                    color: const Color(0xFF6366F1).withOpacity(0.3),
                   ),
                 ),
                 child: Row(
