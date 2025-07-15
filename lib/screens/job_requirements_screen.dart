@@ -115,7 +115,7 @@ class _JobRequirementsScreenState extends State<JobRequirementsScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Specify the job you're applying for to tailor your CV accordingly',
+                    'Specify the job you\'re applying for to tailor your CV accordingly',
                     style: TextStyle(
                       fontSize: 16,
                       color: isDark ? Colors.white70 : const Color(0xFF6B7280),
