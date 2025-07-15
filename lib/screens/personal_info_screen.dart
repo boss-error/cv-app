@@ -278,7 +278,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '\${(cvProvider.completionPercentage * 100).toInt()}% Complete',
+                  '${(cvProvider.completionPercentage * 100).toInt()}% Complete',
                   style: const TextStyle(
                     color: Color(0xFF6366F1),
                     fontWeight: FontWeight.w600,
@@ -398,7 +398,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   ),
                 ),
                 Text(
-                  '\${(cvProvider.completionPercentage * 100).toInt()}%',
+                  '${(cvProvider.completionPercentage * 100).toInt()}%',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -603,7 +603,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             if (value == null || value.trim().isEmpty) {
               return 'Please enter your email address';
             }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}\$').hasMatch(value)) {
+            // Improved email validation regex
+            final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+            if (!emailRegex.hasMatch(value.trim())) {
               return 'Please enter a valid email address';
             }
             return null;

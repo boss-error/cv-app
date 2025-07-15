@@ -35,7 +35,7 @@ class _EducationScreenState extends State<EducationScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
-                  '\${(cvProvider.completionPercentage * 100).toInt()}% Complete',
+                  '${(cvProvider.completionPercentage * 100).toInt()}% Complete',
                   style: const TextStyle(
                     color: Color(0xFF6366F1),
                     fontWeight: FontWeight.w600,
